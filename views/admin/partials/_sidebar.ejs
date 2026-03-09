@@ -1,0 +1,80 @@
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed left-0 top-0 h-full bg-slate-900 sidebar-transition z-50 flex flex-col shadow-2xl -translate-x-full lg:translate-x-0 w-64 lg:w-64">
+    <div class="h-14 lg:h-16 flex items-center justify-between px-3 lg:px-4 border-b border-slate-700">
+        <a href="/admin" class="flex items-center gap-2 lg:gap-3 overflow-hidden">
+            <div class="w-8 lg:w-9 h-8 lg:h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg lg:rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/30">
+                <span class="material-icons text-white text-lg">dashboard</span>
+            </div>
+            <span id="sidebar-text" class="text-white font-bold text-base lg:text-lg whitespace-nowrap transition-opacity duration-200">CMS Admin</span>
+        </a>
+        <button onclick="toggleSidebar()" class="hidden lg:flex p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+            <span class="material-icons text-sm" id="sidebar-toggle-icon">chevron_left</span>
+        </button>
+        <button onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+            <span class="material-icons text-sm">close</span>
+        </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 py-4 px-3 overflow-y-auto scrollbar-hide">
+        <div class="space-y-1">
+            <% const menuItems = [
+                { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: '/admin' },
+                { id: 'homepage', label: 'Homepage', icon: 'home', href: '/admin/homepage', roles: ['super_admin'] },
+                { id: 'brands', label: 'Brands', icon: 'storefront', href: '/admin/brands' },
+                { id: 'users', label: 'Users', icon: 'people', href: '/auth/users', roles: ['super_admin'] }
+            ]; %>
+            
+            <% menuItems.forEach(item => { %>
+                <% if (!item.roles || item.roles.includes(user?.role)) { %>
+                    <a href="<%= item.href %>"
+                        class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <%= activePage === item.id ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' : 'text-slate-400 hover:text-white hover:bg-slate-800' %>"
+                        title="<%= item.label %>">
+                        <span class="material-icons text-lg flex-shrink-0"><%= item.icon %></span>
+                        <span class="nav-text whitespace-nowrap transition-opacity duration-200"><%= item.label %></span>
+                    </a>
+                <% } %>
+            <% }); %>
+        </div>
+
+        <div class="my-4 border-t border-slate-700"></div>
+
+        <div class="space-y-1">
+            <a href="/" target="_blank"
+                class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-200"
+                title="View Site">
+                <span class="material-icons text-lg flex-shrink-0">open_in_new</span>
+                <span class="nav-text whitespace-nowrap transition-opacity duration-200">View Site</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- User Section -->
+    <div class="p-3 border-t border-slate-700">
+        <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-800/50">
+            <a href="/auth/profile" class="flex-shrink-0 block hover:opacity-80 transition-opacity">
+                <% if (user && user.avatar_url) { %>
+                    <img src="<%= user.avatar_url %>" alt="Avatar" class="w-9 h-9 rounded-full object-cover">
+                <% } else { %>
+                    <div class="w-9 h-9 bg-gradient-to-br from-slate-600 to-slate-700 rounded-full flex items-center justify-center">
+                        <span class="material-icons text-white text-sm">account_circle</span>
+                    </div>
+                <% } %>
+            </a>
+            <div class="flex-1 min-w-0 nav-text transition-opacity duration-200">
+                <a href="/auth/profile" class="block hover:underline">
+                    <p class="text-sm font-medium text-white truncate"><%= user ? user.username : 'Admin' %></p>
+                </a>
+                <p class="text-xs text-slate-400 truncate"><%= user && user.role === 'super_admin' ? 'Super Admin' : 'Admin' %></p>
+            </div>
+            <form method="POST" action="/auth/logout">
+                <button type="submit" class="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-700 transition-colors" title="Logout">
+                    <span class="material-icons text-lg">logout</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</aside>
+
+<!-- Mobile Overlay -->
+<div id="mobile-overlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden hidden"></div>

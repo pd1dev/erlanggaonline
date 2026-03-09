@@ -1,0 +1,107 @@
+<!-- Admin Navbar Partial - Include with: include('_navbar', { activePage: 'dashboard' }) -->
+<!-- Valid activePage values: 'dashboard', 'homepage', 'brands', 'users' -->
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-lg" id="admin-navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center gap-3">
+                <span class="material-icons text-blue-400">dashboard</span>
+                <a href="/admin" class="font-bold text-lg">CMS Admin</a>
+            </div>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-6">
+                <% if (user && user.role==='super_admin' ) { %>
+                    <a href="/admin/homepage"
+                        class="<%= activePage === 'homepage' ? 'text-white' : 'text-gray-300 hover:text-white' %> text-sm font-medium transition-colors">Homepage</a>
+                    <% } %>
+                        <a href="/admin/brands"
+                            class="<%= activePage === 'brands' ? 'text-white' : 'text-gray-300 hover:text-white' %> text-sm font-medium transition-colors">Brands</a>
+                        <% if (user && user.role==='super_admin' ) { %>
+                            <a href="/auth/users"
+                                class="<%= activePage === 'users' ? 'text-white' : 'text-gray-300 hover:text-white' %> text-sm font-medium transition-colors">Users</a>
+                            <% } %>
+                                <a href="/" target="_blank"
+                                    class="flex items-center gap-1 text-gray-300 hover:text-white text-sm font-medium transition-colors">
+                                    <span class="material-icons text-sm">open_in_new</span> View Site
+                                </a>
+                                <div class="flex items-center gap-3 pl-4 border-l border-gray-700">
+                                    <a href="/auth/profile" class="flex items-center gap-2 text-gray-300 hover:text-white transition-colors" title="Profil">
+                                        <% if (user && user.avatar_url) { %>
+                                            <img src="<%= user.avatar_url %>" alt="Avatar" class="w-8 h-8 rounded-full object-cover">
+                                        <% } else { %>
+                                            <span class="material-icons text-xl">account_circle</span>
+                                        <% } %>
+                                        <span class="text-sm">
+                                            <%= user ? user.username : '' %>
+                                        </span>
+                                    </a>
+                                    <span
+                                        class="text-xs px-2 py-0.5 rounded-full font-semibold uppercase
+                        <%= user && user.role === 'super_admin' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-blue-500/20 text-blue-400' %>">
+                                        <%= user && user.role==='super_admin' ? 'Super Admin' : 'Admin' %>
+                                    </span>
+                                    <form method="POST" action="/auth/logout" class="inline">
+                                        <button type="submit" class="text-gray-400 hover:text-red-400 transition-colors"
+                                            title="Logout">
+                                            <span class="material-icons text-xl">logout</span>
+                                        </button>
+                                    </form>
+                                </div>
+            </div>
+
+            <!-- Mobile Hamburger -->
+            <button onclick="document.getElementById('admin-mobile-menu').classList.toggle('hidden')"
+                class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="admin-mobile-menu" class="hidden md:hidden border-t border-gray-700 bg-gray-900 pb-3">
+        <div class="px-4 pt-3 pb-2 space-y-1">
+            <% if (user && user.role==='super_admin' ) { %>
+                <a href="/admin/homepage"
+                    class="block px-3 py-2 rounded-lg text-sm font-medium <%= activePage === 'homepage' ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' %> transition-colors">
+                    <span class="material-icons text-sm align-middle mr-2">home</span>Homepage
+                </a>
+                <% } %>
+                    <a href="/admin/brands"
+                        class="block px-3 py-2 rounded-lg text-sm font-medium <%= activePage === 'brands' ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' %> transition-colors">
+                        <span class="material-icons text-sm align-middle mr-2">branding_watermark</span>Brands
+                    </a>
+                    <% if (user && user.role==='super_admin' ) { %>
+                        <a href="/auth/users"
+                            class="block px-3 py-2 rounded-lg text-sm font-medium <%= activePage === 'users' ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' %> transition-colors">
+                            <span class="material-icons text-sm align-middle mr-2">people</span>Users
+                        </a>
+                        <% } %>
+                            <a href="/" target="_blank"
+                                class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+                                <span class="material-icons text-sm align-middle mr-2">open_in_new</span>View
+                                Site
+                            </a>
+        </div>
+        <div class="px-4 pt-2 border-t border-gray-700">
+            <div class="flex items-center gap-3 px-3 py-2">
+                <span class="text-sm text-gray-300">
+                    <%= user ? user.username : '' %>
+                </span>
+                <span
+                    class="text-xs px-2 py-0.5 rounded-full font-semibold uppercase
+                    <%= user && user.role === 'super_admin' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-blue-500/20 text-blue-400' %>">
+                    <%= user && user.role==='super_admin' ? 'Super Admin' : 'Admin' %>
+                </span>
+            </div>
+            <form method="POST" action="/auth/logout">
+                <button type="submit"
+                    class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-red-400 hover:bg-gray-800 transition-colors">
+                    <span class="material-icons text-sm align-middle mr-2">logout</span>Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+<!-- Spacer for fixed navbar -->
+<div class="h-16"></div>

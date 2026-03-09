@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Admin Panel</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Sidebar transition */
+        .sidebar-transition { transition: width 300ms ease-in-out, transform 300ms ease-in-out; }
+        
+        /* Modern card hover */
+        .card-hover { transition: transform 200ms ease, box-shadow 200ms ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1); }
+        
+        /* Button animations */
+        .btn-hover { transition: all 200ms ease; }
+        .btn-hover:hover { transform: translateY(-1px); }
+        
+        /* Input focus animation */
+        .input-focus { transition: border-color 200ms ease, box-shadow 200ms ease; }
+        
+        /* Page fade in */
+        .page-enter { animation: fadeIn 300ms ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body class="bg-slate-100 font-sans antialiased">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full bg-slate-900 sidebar-transition z-50 flex flex-col shadow-2xl">
+        <!-- Logo -->
+        <div class="h-16 flex items-center justify-between px-4 border-b border-slate-700">
+            <a href="/admin" class="flex items-center gap-3 overflow-hidden">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/30">
+                    <span class="material-icons text-white text-lg">dashboard</span>
+                </div>
+                <span id="sidebar-text" class="text-white font-bold text-lg whitespace-nowrap transition-opacity duration-200">CMS Admin</span>
+            </a>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+                <span class="material-icons text-sm" id="sidebar-toggle-icon">chevron_left</span>
+            </button>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="flex-1 py-4 px-3 overflow-y-auto scrollbar-hide">
+            <div class="space-y-1">
+                <% const menuItems = [
+                    { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: '/admin' },
+                    { id: 'homepage', label: 'Homepage', icon: 'home', href: '/admin/homepage', roles: ['super_admin'] },
+                    { id: 'brands', label: 'Brands', icon: 'storefront', href: '/admin/brands' },
+                    { id: 'users', label: 'Users', icon: 'people', href: '/auth/users', roles: ['super_admin'] }
+                ]; %>
+                
+                <% menuItems.forEach(item => { %>
+                    <% if (!item.roles || item.roles.includes(user?.role)) { %>
+                        <a href="<%= item.href %>"
+                            class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 <%= activePage === item.id ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25' : 'text-slate-400 hover:text-white hover:bg-slate-800' %>"
+                            title="<%= item.label %>">
+                            <span class="material-icons text-lg flex-shrink-0"><%= item.icon %></span>
+                            <span class="nav-text whitespace-nowrap transition-opacity duration-200"><%= item.label %></span>
+                        </a>
+                    <% } %>
+                <% }); %>
+            </div>
+
+            <!-- Divider -->
+            <div class="my-4 border-t border-slate-700"></div>
+
+            <!-- Secondary Menu -->
+            <div class="space-y-1">
+                <a href="/" target="_blank"
+                    class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-200"
+                    title="View Site">
+                    <span class="material-icons text-lg flex-shrink-0">open_in_new</span>
+                    <span class="nav-text whitespace-nowrap transition-opacity duration-200">View Site</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- User Section -->
+        <div class="p-3 border-t border-slate-700">
+            <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-800/50">
+                <% if (user && user.avatar_url) { %>
+                    <img src="<%= user.avatar_url %>" alt="Avatar" class="w-9 h-9 rounded-full object-cover flex-shrink-0">
+                <% } else { %>
+                    <div class="w-9 h-9 bg-gradient-to-br from-slate-600 to-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="material-icons text-white text-sm">account_circle</span>
+                    </div>
+                <% } %>
+                <div class="flex-1 min-w-0 nav-text transition-opacity duration-200">
+                    <p class="text-sm font-medium text-white truncate"><%= user ? user.username : 'Admin' %></p>
+                    <p class="text-xs text-slate-400 truncate"><%= user && user.role === 'super_admin' ? 'Super Admin' : 'Admin' %></p>
+                </div>
+                <form method="POST" action="/auth/logout">
+                    <button type="submit" class="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-700 transition-colors" title="Logout">
+                        <span class="material-icons text-lg">logout</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Apply sidebar state immediately to prevent flash -->
+    <script>
+        (function() {
+            var collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            var sidebar = document.getElementById('sidebar');
+            var mainContent = document.getElementById('main-content');
+            var sidebarText = document.getElementById('sidebar-text');
+            var toggleIcon = document.getElementById('sidebar-toggle-icon');
+            var navTexts = document.querySelectorAll('.nav-text');
+            if (collapsed) {
+                sidebar.style.width = '72px';
+                mainContent.style.marginLeft = '72px';
+                sidebarText.style.display = 'none';
+                navTexts.forEach(function(el) { el.style.display = 'none'; });
+                toggleIcon.textContent = 'chevron_right';
+            } else {
+                sidebar.style.width = '260px';
+                mainContent.style.marginLeft = '260px';
+            }
+        })();
+    </script>
+
+    <!-- Main Content -->
+    <div id="main-content" class="sidebar-transition ml-0 lg:ml-64">
+        <!-- Top Header -->
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm">
+            <div class="flex items-center gap-4">
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors">
+                    <span class="material-icons">menu</span>
+                </button>
+                
+                <!-- Page Title -->
+                <h1 class="text-lg font-semibold text-slate-800">
+                    <%= typeof pageTitle !== 'undefined' ? pageTitle : 'Dashboard' %>
+                </h1>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- Search -->
+                <div class="hidden md:block relative">
+                    <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                    <input type="text" placeholder="Search..." 
+                        class="pl-10 pr-4 py-2 w-64 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                </div>
+
+                <!-- Quick Actions -->
+                <button class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors relative">
+                    <span class="material-icons">notifications</span>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+
+                <!-- User Dropdown (Mobile) -->
+                <div class="lg:hidden flex items-center gap-2">
+                    <% if (user && user.avatar_url) { %>
+                        <img src="<%= user.avatar_url %>" alt="Avatar" class="w-8 h-8 rounded-full object-cover">
+                    <% } else { %>
+                        <span class="material-icons text-slate-600">account_circle</span>
+                    <% } %>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="p-6 page-enter">
+            <%- typeof body !== 'undefined' ? body : '' %>
+        </main>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobile-overlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden hidden"></div>
+
+    <script>
+        // Sidebar toggle - persist state in localStorage
+        let sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        
+        function initSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const sidebarText = document.getElementById('sidebar-text');
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+            const navTexts = document.querySelectorAll('.nav-text');
+            
+            if (sidebarCollapsed) {
+                sidebar.style.width = '72px';
+                mainContent.style.marginLeft = '72px';
+                sidebarText.style.display = 'none';
+                navTexts.forEach(el => el.style.display = 'none');
+                toggleIcon.textContent = 'chevron_right';
+            } else {
+                sidebar.style.width = '260px';
+                mainContent.style.marginLeft = '260px';
+                sidebarText.style.display = 'block';
+                navTexts.forEach(el => el.style.display = 'block');
+                toggleIcon.textContent = 'chevron_left';
+            }
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const sidebarText = document.getElementById('sidebar-text');
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+            const navTexts = document.querySelectorAll('.nav-text');
+            
+            sidebarCollapsed = !sidebarCollapsed;
+            localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+            
+            if (sidebarCollapsed) {
+                sidebar.style.width = '72px';
+                mainContent.style.marginLeft = '72px';
+                sidebarText.style.display = 'none';
+                navTexts.forEach(el => el.style.display = 'none');
+                toggleIcon.textContent = 'chevron_right';
+            } else {
+                sidebar.style.width = '260px';
+                mainContent.style.marginLeft = '260px';
+                sidebarText.style.display = 'block';
+                navTexts.forEach(el => el.style.display = 'block');
+                toggleIcon.textContent = 'chevron_left';
+            }
+        }
+
+        // Mobile sidebar toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Close mobile sidebar on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                document.getElementById('mobile-overlay').classList.add('hidden');
+                document.getElementById('sidebar').classList.remove('-translate-x-full');
+            }
+        });
+
+        // Initialize sidebar state on page load
+        document.addEventListener('DOMContentLoaded', initSidebar);
+    </script>
+</body>
+</html>

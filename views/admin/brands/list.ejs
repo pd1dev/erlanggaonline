@@ -1,0 +1,137 @@
+<%- include('../partials/_head', { title: 'Brands - CMS Admin' }) %>
+<body class="bg-slate-100 font-sans antialiased">
+<%- include('../partials/_sidebar', { user, activePage: 'brands' }) %>
+
+    <!-- Main Content -->
+    <div id="main-content" class="sidebar-transition ml-0 lg:ml-64">
+        <%- include('../partials/_header', { title: 'Brands', user }) %>
+
+        <main class="p-3 md:p-6 page-enter">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4 md:mb-6">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-slate-900">
+                        <%= user && user.role==='super_admin' ? 'All Brands' : 'My Brands' %>
+                    </h1>
+                    <p class="text-slate-500 text-sm mt-0.5 md:mt-1">Kelola semua brand Anda di sini</p>
+                </div>
+                <div class="relative">
+                    <button onclick="toggleDropdown()" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl text-xs md:text-sm font-semibold flex items-center gap-1.5 md:gap-2 transition-all shadow-lg shadow-blue-500/25 btn-hover w-full sm:w-auto justify-center sm:justify-start">
+                        <span class="material-icons text-sm md:text-base">add</span> <span class="hidden sm:inline">New Brand</span><span class="sm:hidden">New</span>
+                        <span class="material-icons text-sm md:text-base">expand_more</span>
+                    </button>
+                    <div id="brand-dropdown" class="absolute right-0 sm:right-auto left-0 sm:left-auto mt-2 w-48 sm:w-56 bg-white rounded-xl shadow-xl border border-slate-200 hidden z-10">
+                        <div class="p-1.5 md:p-2">
+                            <a href="/admin/brands/create/wizard" class="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-icons text-blue-600 text-sm md:text-base">auto_awesome</span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-slate-900 text-xs md:text-sm">Quick Create</p>
+                                    <p class="text-xs text-slate-500 hidden md:block">Buat brand dengan wizard</p>
+                                </div>
+                            </a>
+                            <a href="/admin/brands/create" class="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-icons text-slate-600 text-sm md:text-base">settings</span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-slate-900 text-xs md:text-sm">Advanced</p>
+                                    <p class="text-xs text-slate-500 hidden md:block">Buat dengan pengaturan lengkap</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brands Grid -->
+            <% if (brands && brands.length> 0) { %>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                    <% brands.forEach(brand=> { %>
+                        <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden card-hover">
+                            <div class="h-1.5 md:h-2" style="background: <%= brand.primary_color %>"></div>
+                            <div class="p-4 md:p-6">
+                                <div class="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                                    <% if (brand.logo_url) { %>
+                                        <img src="<%= brand.logo_url %>" alt="<%= brand.name %>"
+                                            class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl object-cover">
+                                        <% } else { %>
+                                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center font-bold text-white text-base md:text-lg"
+                                                style="background: <%= brand.primary_color %>">
+                                                <%= brand.logo_initial || brand.name.charAt(0).toUpperCase() %>
+                                            </div>
+                                            <% } %>
+                                                <div class="flex-1 min-w-0">
+                                                    <h3 class="font-bold text-slate-900 truncate text-sm md:text-base">
+                                                        <%= brand.name %>
+                                                    </h3>
+                                                    <p class="text-xs text-slate-500">/<%= brand.slug %>
+                                                    </p>
+                                                </div>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-1.5 md:gap-2 mb-3 md:mb-4">
+                                    <span
+                                        class="text-xs px-2 py-0.5 md:px-2.5 md:py-1 rounded-full bg-slate-100 text-slate-600 font-medium whitespace-nowrap">
+                                        <%= brand.template_name %>
+                                    </span>
+                                    <% if (user && user.role==='super_admin' && brand.created_by_name) { %>
+                                        <span
+                                            class="text-xs px-2 py-0.5 md:px-2.5 md:py-1 rounded-full bg-blue-50 text-blue-600 font-medium flex items-center gap-0.5 md:gap-1 whitespace-nowrap">
+                                            <span class="material-icons text-xs">person</span>
+                                            <span class="hidden md:inline"><%= brand.created_by_name %></span>
+                                        </span>
+                                        <% } %>
+                                </div>
+                                <div class="flex gap-1.5 md:gap-2">
+                                    <a href="/admin/brands/<%= brand.uuid %>/edit"
+                                        class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 md:px-3 py-2 md:py-2.5 rounded-lg md:rounded-xl text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1">
+                                        <span class="material-icons text-xs md:text-sm">edit</span> <span class="hidden sm:inline">Edit</span>
+                                    </a>
+                                    <a href="/<%= brand.slug %>" target="_blank"
+                                        class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 md:px-3 py-2 md:py-2.5 rounded-lg md:rounded-xl text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1">
+                                        <span class="material-icons text-xs md:text-sm">visibility</span> <span class="hidden sm:inline">Preview</span>
+                                    </a>
+                                    <form method="POST" action="/admin/brands/<%= brand.uuid %>/delete" onsubmit="return confirm('Apakah Anda yakin ingin menghapus brand &quot;<%= brand.name %>&quot;? Tindakan ini tidak dapat dibatalkan.')">
+                                        <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 px-2 md:px-3 py-2 md:py-2.5 rounded-lg md:rounded-xl text-xs font-semibold text-center transition-colors flex items-center justify-center gap-1">
+                                            <span class="material-icons text-xs md:text-sm">delete</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+                <% } else { %>
+                    <div class="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 p-8 md:p-12 text-center">
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+                            <span class="material-icons text-3xl md:text-4xl text-slate-400">storefront</span>
+                        </div>
+                        <h3 class="text-base md:text-lg font-semibold text-slate-800 mb-2">Belum Ada Brand</h3>
+                        <p class="text-slate-500 mb-4 md:mb-6 text-sm md:text-base">Buat brand pertama Anda untuk memulai</p>
+                        <a href="/admin/brands/create"
+                            class="inline-flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg md:rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/25 text-sm md:text-base">
+                            <span class="material-icons text-base md:text-lg">add</span> Buat Brand Pertama
+                        </a>
+                    </div>
+                    <% } %>
+        </main>
+    </div>
+
+    <%- include('../partials/_scripts') %>
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('brand-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('brand-dropdown');
+            const container = e.target.closest('.relative');
+            if (!container) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

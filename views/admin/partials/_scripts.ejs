@@ -1,0 +1,107 @@
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden hidden"></div>
+
+    <!-- Sidebar Toggle Functions -->
+    <script>
+        function isMobile() {
+            return window.innerWidth < 1024;
+        }
+
+        function applySidebarState(collapsed) {
+            var sidebar = document.getElementById('sidebar');
+            var mainContent = document.getElementById('main-content');
+            if (!sidebar) return;
+
+            var sidebarText = document.getElementById('sidebar-text');
+            var toggleIcon = document.getElementById('sidebar-toggle-icon');
+            var navTexts = document.querySelectorAll('.nav-text');
+            
+            // On mobile, never mess with the main-content margin or text visibility based on 'collapsed' state.
+            // Collapsed state ONLY applies to desktop.
+            if (isMobile()) {
+                if (mainContent) {
+                    mainContent.classList.remove('lg:ml-[72px]', 'lg:ml-64');
+                    mainContent.classList.add('ml-0');
+                }
+                sidebar.classList.remove('lg:w-[72px]');
+                sidebar.classList.add('w-64', 'lg:w-64');
+                
+                // Ensure text is always visible on mobile when sidebar is out
+                if (sidebarText) sidebarText.style.display = 'block';
+                navTexts.forEach(function(el) { el.style.display = 'block'; });
+                return;
+            }
+
+            // Desktop Behavior
+            if (collapsed) {
+                sidebar.classList.add('lg:w-[72px]');
+                sidebar.classList.remove('lg:w-64');
+                if (mainContent) {
+                    mainContent.classList.add('lg:ml-[72px]');
+                    mainContent.classList.remove('lg:ml-64');
+                }
+                if (sidebarText) sidebarText.style.display = 'none';
+                navTexts.forEach(function(el) { el.style.display = 'none'; });
+                if (toggleIcon) toggleIcon.textContent = 'chevron_right';
+            } else {
+                sidebar.classList.remove('lg:w-[72px]');
+                sidebar.classList.add('lg:w-64');
+                if (mainContent) {
+                    mainContent.classList.remove('lg:ml-[72px]');
+                    mainContent.classList.add('lg:ml-64');
+                }
+                if (sidebarText) sidebarText.style.display = 'block';
+                navTexts.forEach(function(el) { el.style.display = 'block'; });
+                if (toggleIcon) toggleIcon.textContent = 'chevron_left';
+            }
+        }
+
+        function initSidebar() {
+            var collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            applySidebarState(collapsed);
+        }
+
+        function toggleSidebar() {
+            // Only toggle collapsed state on desktop
+            if (isMobile()) return;
+
+            var sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            var newState = !sidebarCollapsed;
+            localStorage.setItem('sidebarCollapsed', newState);
+            applySidebarState(newState);
+        }
+
+        function toggleMobileSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('mobile-overlay');
+            
+            // Ensure mobile sidebar is full width with text when opened
+            var sidebarText = document.getElementById('sidebar-text');
+            var navTexts = document.querySelectorAll('.nav-text');
+            if (sidebarText) sidebarText.style.display = 'block';
+            navTexts.forEach(function(el) { el.style.display = 'block'; });
+
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                if (overlay) overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                if (overlay) overlay.classList.add('hidden');
+            }
+        }
+
+        window.addEventListener('resize', function() {
+            var collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            applySidebarState(collapsed);
+
+            if (!isMobile()) {
+                var overlay = document.getElementById('mobile-overlay');
+                var sidebar = document.getElementById('sidebar');
+                if (overlay) overlay.classList.add('hidden');
+                // Ensure sidebar isn't translated out of view on desktop
+                if (sidebar) sidebar.classList.remove('-translate-x-full');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', initSidebar);
+    </script>

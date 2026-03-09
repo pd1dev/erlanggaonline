@@ -1,0 +1,91 @@
+<%- include('../partials/_head', { title: product ? 'Edit Product - CMS Admin' : 'Add Product - CMS Admin' }) %>
+<body class="bg-slate-100 font-sans antialiased">
+<%- include('../partials/_sidebar', { user, activePage: 'brands' }) %>
+
+    <!-- Main Content -->
+    <div id="main-content" class="sidebar-transition ml-0 lg:ml-64">
+        <%- include('../partials/_header', { title: 'Products', user }) %>
+
+        <main class="p-3 md:p-6 page-enter">
+            <div class="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-500 mb-4 md:mb-6">
+                <a href="/admin" class="hover:text-slate-700">Dashboard</a>
+                <span class="material-icons text-xs">chevron_right</span>
+                <a href="/admin/brands/<%= brand.uuid %>/edit" class="hover:text-slate-700 truncate max-w-[150px] md:max-w-none">
+                    <%= brand.name %>
+                </a>
+                <span class="material-icons text-xs">chevron_right</span>
+                <span class="text-slate-900 font-medium">
+                    <%= product ? 'Edit Product' : 'Add Product' %>
+                </span>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data"
+                action="<%= product ? '/admin/brands/' + brand.uuid + '/products/' + product.uuid + '/update' : '/admin/brands/' + brand.uuid + '/products/create' %>">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 card-hover">
+                    <h2 class="text-base md:text-lg font-bold text-slate-900 mb-3 md:mb-4">
+                        <%= product ? 'Edit Product' : 'Add New Product' %>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
+                            <input type="text" name="title" value="<%= product ? product.title : '' %>"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                            <textarea name="description" rows="2 md:3"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"><%= product ? product.description : '' %></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Price (Rp)</label>
+                            <input type="number" name="price" value="<%= product ? product.price : 0 %>"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Grade / Level</label>
+                            <input type="text" name="grade" value="<%= product ? product.grade : '' %>"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                placeholder="e.g. Grade 7">
+                        </div>
+                        <div class="md:col-span-2">
+                            <%- include('../components/imageUpload', { 
+                                name: 'image', 
+                                existingUrl: product ? product.image_url : '',
+                                previewId: 'product-image'
+                            }) %>
+                        </div>
+                        <input type="hidden" name="existing_image_url" value="<%= product ? product.image_url : '' %>">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Product Link (URL)</label>
+                            <input type="url" name="product_url" value="<%= product ? product.product_url || '' : '' %>"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                placeholder="https://tokopedia.com/produk-anda (Opsional)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Sort Order</label>
+                            <input type="number" name="sort_order" value="<%= product ? product.sort_order : 0 %>"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                        </div>
+                        <div class="flex items-center gap-2 pt-4 md:pt-6">
+                            <input type="checkbox" name="is_featured" id="is_featured" value="1"
+                                <%= (product && product.is_featured) ? 'checked' : '' %>
+                                class="w-4 h-4 text-blue-600 border-slate-300 rounded">
+                            <label for="is_featured" class="text-sm font-medium text-slate-700">Featured / Best Seller</label>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-6 flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
+                        <a href="/admin/brands/<%= brand.uuid %>/edit"
+                            class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 md:px-5 py-2 rounded-lg text-sm font-semibold transition-colors text-center">Cancel</a>
+                        <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-6 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+                            <span class="material-icons text-sm">save</span> Save Product
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <%- include('../partials/_scripts') %>
+</body>
+</html>

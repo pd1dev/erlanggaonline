@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        <%= settings.site_name %> - <%= settings.site_tagline %>
+    </title>
+    <% if (settings.logo_url) { %>
+    <link rel="icon" type="image/jpeg" href="<%= settings.logo_url %>">
+    <% } else { %>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+    <% } %>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "<%= settings.primary_color %>",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #e0e5ec;
+            color: #4a5568;
+        }
+
+        .dark body {
+            background-color: #1f2128;
+            color: #e2e8f0;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1.2s ease-out forwards;
+        }
+
+        #promo-slider {
+            transition: background 1.5s ease-in-out;
+        }
+
+        /* Neumorphic Shadows */
+        .neu-out {
+            box-shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
+            background-color: #e0e5ec;
+            border: none;
+        }
+        .neu-in {
+            box-shadow: inset 6px 6px 10px 0 rgba(163,177,198, 0.7), inset -6px -6px 10px 0 rgba(255,255,255, 0.8);
+            background-color: #e0e5ec;
+            border: none;
+        }
+        .dark .neu-out {
+            box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.6), -6px -6px 14px rgba(50, 52, 60, 0.3);
+            background-color: #1f2128;
+            border: none;
+        }
+        .dark .neu-in {
+            box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.6), inset -6px -6px 10px 0 rgba(50, 52, 60, 0.3);
+            background-color: #1f2128;
+            border: none;
+        }
+        
+        .neu-flat {
+            background-color: #e0e5ec;
+            border: none;
+        }
+        .dark .neu-flat {
+            background-color: #1f2128;
+            border: none;
+        }
+
+        .hover-neu-in:hover {
+            box-shadow: inset 6px 6px 10px 0 rgba(163,177,198, 0.7), inset -6px -6px 10px 0 rgba(255,255,255, 0.8) !important;
+        }
+        .dark .hover-neu-in:hover {
+            box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.6), inset -6px -6px 10px 0 rgba(50, 52, 60, 0.3) !important;
+        }
+
+        .active-neu-in:active {
+            box-shadow: inset 6px 6px 10px 0 rgba(163,177,198, 0.7), inset -6px -6px 10px 0 rgba(255,255,255, 0.8) !important;
+        }
+        .dark .active-neu-in:active {
+            box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.6), inset -6px -6px 10px 0 rgba(50, 52, 60, 0.3) !important;
+        }
+
+        /* Specific overrides for buttons to keep primary color */
+        .neu-out-primary {
+            box-shadow: 6px 6px 14px rgb(163,177,198,0.6), -6px -6px 14px rgba(255,255,255, 0.5);
+            border: none;
+        }
+        .dark .neu-out-primary {
+            box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.6), -6px -6px 14px rgba(50, 52, 60, 0.3);
+            border: none;
+        }
+        
+        .hover-neu-primary:hover {
+            box-shadow: 8px 8px 18px rgb(163,177,198,0.7), -8px -8px 18px rgba(255,255,255, 0.6);
+            transform: translateY(-1px);
+        }
+        .dark .hover-neu-primary:hover {
+            box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.7), -8px -8px 18px rgba(50, 52, 60, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .active-neu-in-primary:active {
+            box-shadow: inset 4px 4px 10px rgba(0,0,0,0.25), inset -4px -4px 10px rgba(255,255,255,0.25) !important;
+            transform: translateY(1px);
+        }
+        .dark .active-neu-in-primary:active {
+            box-shadow: inset 4px 4px 10px rgba(0,0,0,0.4), inset -4px -4px 10px rgba(255,255,255,0.1) !important;
+            transform: translateY(1px);
+        }
+
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, transform 0.1s ease;
+        }
+    </style>
+</head>
+
+<body class="transition-colors duration-300">
+    <div class="relative flex min-h-screen flex-col overflow-x-hidden">
+
+        <!-- Header / Navigation -->
+        <header
+            class="fixed top-0 left-0 right-0 z-50 w-full neu-flat px-4 sm:px-6 md:px-20 py-4 shadow-sm"
+            id="homepage-header">
+            <div class="mx-auto flex max-w-[1280px] items-center justify-between gap-4 md:gap-8">
+                <div class="flex items-center gap-4 md:gap-8">
+                    <div class="flex items-center gap-3">
+                        <% if (settings.logo_url) { %>
+                            <img src="<%= settings.logo_url %>" alt="<%= settings.site_name %>"
+                                class="h-8 w-auto object-contain">
+                            <% } else { %>
+                                <div class="text-primary">
+                                    <svg class="h-8 w-8" fill="none" viewBox="0 0 48 48"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z"
+                                            fill="currentColor"></path>
+                                        <path clip-rule="evenodd"
+                                            d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z"
+                                            fill="currentColor" fill-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <% } %>
+                                    <h2 class="text-xl font-extrabold tracking-tight">
+                                        <%= settings.site_name %>
+                                    </h2>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-6">
+                        <% navLinks.filter(n=> n.position === 'left').forEach(link => { %>
+                            <a class="text-sm font-semibold hover:text-primary transition-colors"
+                                href="<%= link.href %>">
+                                <%= link.label %>
+                            </a>
+                            <% }); %>
+                    </nav>
+                </div>
+                <div class="hidden lg:flex items-center gap-4">
+                    <% navLinks.filter(n=> n.position === 'right').forEach(link => { %>
+                        <% if (link.is_button) { %>
+                            <a class="text-sm font-bold bg-primary text-white px-6 py-2 rounded-full neu-out-primary hover-neu-primary active-neu-in-primary"
+                                href="<%= link.href %>">
+                                <%= link.label %>
+                            </a>
+                            <% } else { %>
+                                <a class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-4 py-2"
+                                    href="<%= link.href %>">
+                                    <%= link.label %>
+                                </a>
+                                <% } %>
+                                    <% }); %>
+                                    
+                    <!-- Theme Toggle Navbar -->
+                    <button id="themeToggle"
+                        class="flex items-center justify-center w-10 h-10 rounded-full neu-out hover-neu-in active-neu-in text-gray-600 dark:text-gray-300 ml-2">
+                        <span class="material-symbols-outlined notranslate text-[20px]" id="themeIcon">dark_mode</span>
+                    </button>
+                    
+                    <!-- Custom Language Selector Desktop -->
+                    <div class="relative ml-2 hidden lg:block">
+                        <button id="langToggle" class="flex items-center justify-center h-10 px-4 rounded-xl neu-out hover-neu-in active-neu-in text-sm font-bold text-gray-600 dark:text-gray-300 gap-1" onclick="document.getElementById('langMenu').classList.toggle('hidden'); document.getElementById('langMenu').classList.toggle('opacity-0');">
+                            <span id="currentLang" class="uppercase">ID</span>
+                            <span class="material-symbols-outlined notranslate text-[18px]">expand_more</span>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div id="langMenu" class="absolute right-0 mt-3 w-32 rounded-xl neu-out p-2 hidden opacity-0 transition-opacity z-50">
+                            <button onclick="changeLanguage('id', 'ID')" class="w-full text-left px-4 py-2 text-sm font-semibold rounded-lg hover:neu-in hover:text-primary transition-all text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                <img src="https://flagcdn.com/w20/id.png" alt="ID" class="w-5 h-auto rounded-sm"> Indonesia
+                            </button>
+                            <button onclick="changeLanguage('en', 'EN')" class="w-full text-left px-4 py-2 mt-1 text-sm font-semibold rounded-lg hover:neu-in hover:text-primary transition-all text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                <img src="https://flagcdn.com/w20/gb.png" alt="EN" class="w-5 h-auto rounded-sm"> English
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden Google Translate Element -->
+                    <div id="google_translate_element" style="display:none;"></div>
+                </div>
+                <!-- Mobile Hamburger -->
+                <button onclick="document.getElementById('homepage-mobile-menu').classList.toggle('hidden')"
+                    class="lg:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-primary hover:bg-gray-100 transition-colors">
+                    <span class="material-symbols-outlined notranslate text-2xl">menu</span>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="homepage-mobile-menu" class="hidden lg:hidden mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col gap-2 max-w-[1280px] mx-auto px-4 sm:px-6">
+                    <!-- Custom Language Selector Mobile -->
+                    <div class="flex gap-2 mb-4">
+                        <button onclick="changeLanguage('id', 'ID')" class="flex-1 px-4 py-2 text-sm font-semibold rounded-xl neu-out hover-neu-in active-neu-in text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2">
+                            <img src="https://flagcdn.com/w20/id.png" alt="ID" class="w-5 h-auto rounded-sm"> ID
+                        </button>
+                        <button onclick="changeLanguage('en', 'EN')" class="flex-1 px-4 py-2 text-sm font-semibold rounded-xl neu-out hover-neu-in active-neu-in text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2">
+                            <img src="https://flagcdn.com/w20/gb.png" alt="EN" class="w-5 h-auto rounded-sm"> EN
+                        </button>
+                    </div>
+                    
+                    <% navLinks.filter(n=> n.position === 'left').forEach(link => { %>
+                        <a class="text-sm font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-gray-100"
+                            href="<%= link.href %>">
+                            <%= link.label %>
+                        </a>
+                        <% }); %>
+                            <% navLinks.filter(n=> n.position === 'right').forEach(link => { %>
+                                <% if (link.is_button) { %>
+                                    <a class="text-sm font-bold bg-primary text-white px-6 py-2.5 rounded-full text-center mt-2 neu-out-primary hover-neu-primary active-neu-in-primary"
+                                        href="<%= link.href %>">
+                                        <%= link.label %>
+                                    </a>
+                                    <% } else { %>
+                                        <a class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-gray-100"
+                                            href="<%= link.href %>">
+                                            <%= link.label %>
+                                        </a>
+                                        <% } %>
+                                            <% }); %>
+                </div>
+            </div>
+        </header>
+        <!-- Spacer for fixed header -->
+        <div class="h-[72px]"></div>
+
+        <main class="flex-1">
+            <!-- Hero Section -->
+            <section class="py-12 md:py-24">
+                <div class="mx-auto max-w-[1280px] grid grid-cols-1 items-center lg:grid-cols-2 px-6 md:px-20 lg:gap-8">
+                    <div class="flex flex-col gap-8 lg:pr-12">
+                        <div
+                            class="absolute -top-10 -left-10 h-32 w-32 rounded-full bg-yellow-300/20 blur-2xl -z-10 animate-pulse">
+                        </div>
+                        <div class="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl -z-10">
+                        </div>
+                        <div
+                            class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-primary text-xs font-bold uppercase tracking-wider shadow-sm border border-primary/20">
+                            <span class="material-symbols-outlined notranslate text-sm">
+                                <%= settings.hero_badge_icon %>
+                            </span>
+                            <%= settings.hero_badge %>
+                        </div>
+                        <h1 class="text-5xl font-black leading-[1.1] tracking-tight md:text-7xl">
+                            <%= settings.hero_title %> <span class="text-primary">
+                                    <%= settings.hero_title_highlight %>
+                                </span>
+                        </h1>
+                        <p class="text-lg text-slate-600 leading-relaxed max-w-[540px]">
+                            <%= settings.hero_description %>
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="<%= settings.hero_cta1_href %>"
+                                class="flex h-14 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-lg font-bold text-white neu-out-primary hover-neu-primary active-neu-in-primary">
+                                <%= settings.hero_cta1_text %> <span
+                                        class="material-symbols-outlined notranslate">arrow_forward</span>
+                            </a>
+                            <a href="<%= settings.hero_cta2_href %>"
+                                class="flex h-14 items-center justify-center gap-2 rounded-xl px-8 text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 neu-out hover-neu-in active-neu-in">
+                                <%= settings.hero_cta2_text %>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <div class="absolute -inset-4 bg-primary/10 blur-3xl rounded-3xl"></div>
+                        <% if (banners && banners.length> 0) { %>
+                            <!-- Multi-Banner Carousel -->
+                            <div class="relative h-[400px] md:h-[500px] w-full rounded-2xl overflow-hidden"
+                                id="banner-carousel">
+                                <% banners.forEach((banner, idx)=> { %>
+                                    <div class="banner-slide absolute inset-0 transition-opacity duration-700 ease-in-out <%= idx === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' %>"
+                                        style="background: linear-gradient(135deg, <%= banner.bg_gradient_from || '#257bf4' %>, <%= banner.bg_gradient_to || '#60a5fa' %>);">
+                                        <% if (banner.image_url) { %>
+                                            <img alt="<%= banner.title %>"
+                                                class="absolute inset-0 h-full w-full object-cover"
+                                                src="<%= banner.image_url %>" />
+                                            <% } %>
+                                                <div
+                                                    class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                                                </div>
+                                                <% if (banner.badge) { %>
+                                                    <div
+                                                        class="absolute top-6 left-6 rounded-full bg-white/20 px-4 py-1 text-xs font-bold uppercase backdrop-blur-md border border-white/30 shadow-sm z-10 text-white">
+                                                        <%= banner.badge %>
+                                                    </div>
+                                                    <% } %>
+                                                        <div class="absolute inset-0 flex flex-col z-10 px-8">
+                                                            <div
+                                                                class="flex-1 flex flex-col items-center justify-center text-center pt-8">
+                                                                <h3
+                                                                    class="mb-4 text-4xl font-black md:text-5xl text-white drop-shadow-lg">
+                                                                    <%= banner.title %>
+                                                                </h3>
+                                                                <% if (banner.description || banner.promo_code) { %>
+                                                                    <p
+                                                                        class="mb-6 text-lg text-white opacity-90 max-w-lg">
+                                                                        <%= banner.description %>
+                                                                            <% if (banner.promo_code) { %>
+                                                                                <span class="font-mono font-bold">
+                                                                                    <%= banner.promo_code %>
+                                                                                </span>
+                                                                                <% } %>
+                                                                    </p>
+                                                                    <% } %>
+                                                            </div>
+                                                            <% if (banner.button_text) { %>
+                                                                <div class="pb-8">
+                                                                    <a href="<%= banner.button_href || '#' %>"
+                                                                        class="rounded-full px-8 py-3 font-bold text-primary inline-block bg-white shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all">
+                                                                        <%= banner.button_text %>
+                                                                    </a>
+                                                                </div>
+                                                                <% } %>
+                                                        </div>
+                                    </div>
+                                    <% }); %>
+
+                                        <% if (banners.length> 1) { %>
+                                            <!-- Prev/Next -->
+                                            <button onclick="slideBanner(-1)"
+                                                class="absolute left-3 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white rounded-full w-10 h-10 flex items-center justify-center transition-all">
+                                                <span class="material-symbols-outlined notranslate">chevron_left</span>
+                                            </button>
+                                            <button onclick="slideBanner(1)"
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white rounded-full w-10 h-10 flex items-center justify-center transition-all">
+                                                <span class="material-symbols-outlined notranslate">chevron_right</span>
+                                            </button>
+                                            <!-- Dots -->
+                                            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                                                <% banners.forEach((_, idx)=> { %>
+                                                    <button onclick="goToBanner(<%= idx %>)"
+                                                        class="banner-dot w-2.5 h-2.5 rounded-full transition-all <%= idx === 0 ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75' %>"></button>
+                                                    <% }); %>
+                                            </div>
+                                            <% } %>
+                            </div>
+                            <script>
+                                    (function () {
+                                        let current = 0;
+                                        const slides = document.querySelectorAll('.banner-slide');
+                                        const dots = document.querySelectorAll('.banner-dot');
+                                        const total = slides.length;
+                                        if (total <= 1) return;
+
+                                        function show(idx) {
+                                            slides.forEach((s, i) => { s.style.opacity = i === idx ? '1' : '0'; s.style.zIndex = i === idx ? '10' : '0'; });
+                                            dots.forEach((d, i) => { d.className = 'banner-dot w-2.5 h-2.5 rounded-full transition-all ' + (i === idx ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'); });
+                                            current = idx;
+                                        }
+
+                                        window.slideBanner = function (dir) { show((current + dir + total) % total); resetTimer(); };
+                                        window.goToBanner = function (idx) { show(idx); resetTimer(); };
+
+                                        let timer = setInterval(() => show((current + 1) % total), 5000);
+                                        function resetTimer() { clearInterval(timer); timer = setInterval(() => show((current + 1) % total), 5000); }
+                                    })();
+                            </script>
+                            <% } %>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Products -->
+            <section class="py-20 relative overflow-hidden neu-flat" id="products">
+                <div class="mx-auto max-w-[1280px] px-6">
+                    <div class="mb-12 flex flex-col items-center text-center">
+                        <h2 class="text-3xl font-bold tracking-tight md:text-4xl">
+                            <%= settings.products_heading %>
+                        </h2>
+                        <div class="mt-4 h-1.5 w-24 rounded-full bg-primary"></div>
+                    </div>
+                    <div class="absolute top-0 right-10 opacity-10 hidden lg:block"><span
+                            class="material-symbols-outlined notranslate text-9xl text-primary">auto_awesome</span></div>
+                    <div class="absolute bottom-0 left-10 opacity-10 hidden lg:block"><span
+                            class="material-symbols-outlined notranslate text-9xl text-yellow-500">celebration</span></div>
+                    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                        <% products.forEach(product=> { %>
+                            <div
+                                class="group flex flex-col overflow-hidden rounded-2xl p-2 transition-all hover-neu-in border-t-4 border-t-primary neu-out">
+                                <div
+                                    class="relative aspect-video overflow-hidden rounded-xl <%= product.image_url ? 'bg-slate-200' : (product.bg_color === 'blue' ? 'bg-blue-100 flex items-center justify-center' : product.bg_color === 'purple' ? 'bg-purple-100 flex items-center justify-center' : product.bg_color === 'orange' ? 'bg-orange-100 flex items-center justify-center' : 'bg-slate-200') %>">
+                                    <% if (product.image_url) { %>
+                                        <img alt="<%= product.title %>"
+                                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            src="<%= product.image_url %>" />
+                                        <% } else { %>
+                                            <span
+                                                class="material-symbols-outlined notranslate text-6xl <%= product.bg_color === 'blue' ? 'text-primary/40' : product.bg_color === 'purple' ? 'text-purple-400/40' : product.bg_color === 'orange' ? 'text-orange-400/40' : 'text-primary/40' %>">
+                                                <%= product.icon %>
+                                            </span>
+                                            <% } %>
+                                                <div
+                                                    class="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-primary shadow-sm">
+                                                    <span class="material-symbols-outlined notranslate">
+                                                        <%= product.icon %>
+                                                    </span>
+                                                </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold">
+                                        <%= product.title %>
+                                    </h3>
+                                    <p class="mt-2 text-slate-500 line-clamp-2">
+                                        <%= product.description %>
+                                    </p>
+                                    <a class="mt-6 inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all"
+                                        href="<%= product.link_href %>">
+                                        <%= product.link_text %> <span
+                                                class="material-symbols-outlined notranslate text-sm">arrow_forward</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seri Produk (Brands) -->
+            <% if (brands && brands.length> 0) { %>
+                <section class="py-20 neu-flat" id="seri-produk">
+                    <div class="mx-auto max-w-[1280px] px-6">
+                        <div class="mb-12 flex flex-col items-center text-center">
+                            <h2 class="text-3xl font-bold tracking-tight md:text-4xl">
+                                Seri Produk
+                            </h2>
+                            <div class="mt-4 h-1.5 w-24 rounded-full bg-primary"></div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            <% brands.forEach(brand=> { %>
+                                <a href="/<%= brand.slug %>"
+                                    class="group flex flex-col overflow-hidden rounded-2xl p-6 transition-all neu-out hover-neu-in">
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <% if (brand.logo_url) { %>
+                                            <img src="<%= brand.logo_url %>" alt="<%= brand.name %> logo" class="w-14 h-14 rounded-xl object-contain bg-white neu-out p-1 shadow-sm">
+                                        <% } else { %>
+                                            <div class="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-white text-xl neu-out"
+                                                style="background: <%= brand.primary_color %>">
+                                                <%= brand.logo_initial %>
+                                            </div>
+                                        <% } %>
+                                        <div>
+                                            <h3
+                                                class="text-lg font-bold text-[#0d131c] group-hover:text-primary transition-colors">
+                                                <%= brand.name %>
+                                            </h3>
+                                            <p class="text-xs text-slate-400">/<%= brand.slug %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-slate-500 line-clamp-2 mb-4">
+                                        <%= brand.tagline || 'Koleksi lengkap produk ' + brand.name %>
+                                    </p>
+                                    <span
+                                        class="inline-flex items-center gap-1 text-sm font-bold text-primary group-hover:gap-2 transition-all">
+                                        Lihat Produk <span
+                                            class="material-symbols-outlined notranslate text-sm">arrow_forward</span>
+                                    </span>
+                                </a>
+                                <% }); %>
+                        </div>
+                    </div>
+                </section>
+                <% } %>
+
+                    <!-- Survey Teaser -->
+                    <section class="mx-auto max-w-[1280px] px-6 py-10">
+                        <div
+                            class="flex flex-col items-center justify-between gap-8 rounded-[2rem] bg-primary p-8 text-white md:flex-row md:px-16 md:py-12 hover:scale-[1.02] hover:shadow-2xl transition-all duration-500">
+                            <div class="flex items-start gap-6">
+                                <div
+                                    class="hidden md:flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
+                                    <span class="material-symbols-outlined notranslate text-4xl">rate_review</span>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <h2 class="text-2xl font-bold md:text-3xl">
+                                        <%= settings.survey_heading %>
+                                    </h2>
+                                    <p class="max-w-[500px] text-primary-100 opacity-90">
+                                        <%= settings.survey_description %>
+                                    </p>
+                                </div>
+                            </div>
+                            <a href="<%= settings.survey_button_href %>"
+                                class="flex min-w-[180px] items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 text-lg font-bold text-primary shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all">
+                                <%= settings.survey_button_text %>
+                            </a>
+                        </div>
+                    </section>
+
+                    <!-- Testimonials -->
+                    <section class="py-20 relative overflow-hidden">
+                        <div class="mx-auto max-w-[1280px] px-6">
+                            <div class="mb-12 flex flex-col items-center text-center">
+                                <span class="text-sm font-bold uppercase tracking-widest text-primary">
+                                    <%= settings.testimonials_badge %>
+                                </span>
+                                <h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">
+                                    <%= settings.testimonials_heading %>
+                                </h2>
+                            </div>
+                            <div class="absolute top-0 right-10 opacity-10 hidden lg:block"><span
+                                    class="material-symbols-outlined notranslate text-9xl text-primary">auto_awesome</span></div>
+                            <div class="absolute bottom-0 left-10 opacity-10 hidden lg:block"><span
+                                    class="material-symbols-outlined notranslate text-9xl text-yellow-500">celebration</span></div>
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                                <% testimonials.forEach(t=> { %>
+                                    <div class="rounded-2xl p-8 neu-out">
+                                        <div class="flex gap-1 text-yellow-400">
+                                            <% for (let i=0; i < t.rating; i++) { %>
+                                                <span class="material-symbols-outlined notranslate fill-1">star</span>
+                                                <% } %>
+                                        </div>
+                                        <p class="mt-4 italic text-slate-600">"<%= t.quote %>"</p>
+                                        <div class="mt-6 flex items-center gap-4">
+                                            <div class="h-12 w-12 rounded-full bg-slate-100 overflow-hidden">
+                                                <% if (t.avatar_url) { %>
+                                                    <img alt="<%= t.name %>" src="<%= t.avatar_url %>" />
+                                                    <% } else { %>
+                                                        <div
+                                                            class="h-full w-full flex items-center justify-center bg-primary/10 text-primary font-bold text-lg">
+                                                            <%= t.name.charAt(0) %>
+                                                        </div>
+                                                        <% } %>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold">
+                                                    <%= t.name %>
+                                                </h4>
+                                                <p class="text-xs text-slate-400">
+                                                    <%= t.role %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+                    </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="pt-16 pb-8 neu-flat" id="about">
+            <div class="mx-auto max-w-[1280px] px-6">
+                <div class="grid grid-cols-1 gap-12 lg:grid-cols-4">
+                    <div class="col-span-1 lg:col-span-1">
+                        <% if (settings.logo_url) { %>
+                            <img src="<%= settings.logo_url %>" alt="<%= settings.site_name %> Logo"
+                                class="h-16 w-auto mb-4">
+                            <% } else { %>
+                                <div class="flex items-center gap-3 text-primary mb-6">
+                                    <span class="material-symbols-outlined notranslate text-4xl">auto_stories</span>
+                                    <h2 class="text-2xl font-extrabold tracking-tight text-[#0d131c]">
+                                        <%= settings.site_name %>
+                                    </h2>
+                                </div>
+                                <% } %>
+                                    <p class="text-sm text-slate-500 leading-relaxed">
+                                        <%= settings.footer_description %>
+                                    </p>
+                                    <div class="mt-6 flex gap-4">
+                                        <% socialLinks.forEach(s=> { %>
+                                            <a class="h-10 w-10 flex items-center justify-center rounded-lg text-slate-600 hover:text-primary transition-all neu-out hover-neu-in active-neu-in"
+                                                href="<%= s.href %>">
+                                                <span class="material-symbols-outlined notranslate">
+                                                    <%= s.icon %>
+                                                </span>
+                                            </a>
+                                            <% }); %>
+                                    </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-8 lg:col-span-2">
+                        <% Object.keys(footerColumns).forEach(colTitle=> { %>
+                            <div class="flex flex-col gap-4">
+                                <h4 class="font-bold text-[#0d131c]">
+                                    <%= colTitle %>
+                                </h4>
+                                <nav class="flex flex-col gap-3 text-sm text-slate-500">
+                                    <% footerColumns[colTitle].forEach(link=> { %>
+                                        <a class="hover:text-primary transition-colors" href="<%= link.href %>">
+                                            <%= link.label %>
+                                        </a>
+                                        <% }); %>
+                                </nav>
+                            </div>
+                            <% }); %>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <h4 class="font-bold text-[#0d131c]">Kontak</h4>
+                        <div class="flex flex-col gap-3 text-sm text-slate-500">
+                            <% if (settings.footer_address) { %>
+                                <div class="flex items-start gap-3">
+                                    <span class="material-symbols-outlined notranslate text-primary text-xl">location_on</span>
+                                    <span>
+                                        <%= settings.footer_address %>
+                                    </span>
+                                </div>
+                                <% } %>
+                                    <% if (settings.footer_phone) { %>
+                                        <div class="flex items-center gap-3">
+                                            <span
+                                                class="material-symbols-outlined notranslate text-primary text-xl">phone_iphone</span>
+                                            <span>
+                                                <%= settings.footer_phone %>
+                                            </span>
+                                        </div>
+                                        <% } %>
+                                            <% if (settings.footer_email) { %>
+                                                <div class="flex items-center gap-3">
+                                                    <span
+                                                        class="material-symbols-outlined notranslate text-primary text-xl">mail</span>
+                                                    <span>
+                                                        <%= settings.footer_email %>
+                                                    </span>
+                                                </div>
+                                                <% } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-16 pt-8 text-center text-xs text-slate-400">
+                    <p>
+                        <%= settings.footer_copyright %>
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- Theme Switcher & Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'id',
+                includedLanguages: 'en,id',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function changeLanguage(langCode, langLabel) {
+            // Update UI label
+            document.getElementById('currentLang').textContent = langLabel;
+            // Close dropdown
+            document.getElementById('langMenu').classList.add('hidden', 'opacity-0');
+            
+            // Trigger Google Translate hidden iframe
+            var selectField = document.querySelector("#google_translate_element select");
+            if (selectField) {
+                selectField.value = langCode;
+                selectField.dispatchEvent(new Event('change'));
+            }
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+        } else {
+            htmlElement.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+        }
+
+        // Toggle theme on click
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.theme = 'light';
+                themeIcon.textContent = 'dark_mode';
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.theme = 'dark';
+                themeIcon.textContent = 'light_mode';
+            }
+        });
+    </script>
+    
+    <style>
+        /* Hide Google Translate Top Bar & Elements completely */
+        .goog-te-banner-frame.skiptranslate, 
+        .goog-te-gadget-icon,
+        #goog-gt-tt,
+        .goog-tooltip,
+        .goog-tooltip:hover {
+            display: none !important;
+        } 
+        body {
+            top: 0px !important; 
+        }
+        
+        #google_translate_element {
+            display: none !important;
+        }
+        
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+    </style>
+</body>
+
+</html>

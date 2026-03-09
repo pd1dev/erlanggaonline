@@ -1,0 +1,128 @@
+<%- include('../admin/partials/_head', { title: 'Profil Saya - CMS Admin' }) %>
+<body class="bg-slate-100 font-sans antialiased">
+<%- include('../admin/partials/_sidebar', { user, activePage: 'profile' }) %>
+
+    <!-- Main Content -->
+    <div id="main-content" class="sidebar-transition ml-0 lg:ml-64">
+        <%- include('../admin/partials/_header', { title: 'Profil Saya', user }) %>
+
+        <main class="p-3 lg:p-6 page-enter">
+            <div class="flex items-center gap-1.5 lg:gap-2 text-xs lg:text-sm text-slate-500 mb-4 lg:mb-6">
+                <a href="/admin" class="hover:text-slate-700">Dashboard</a>
+                <span class="material-icons text-xs">chevron_right</span>
+                <span class="text-slate-900 font-medium">Profil Saya</span>
+            </div>
+
+            <% if (success) { %>
+                <div class="bg-green-50 border border-green-200 text-green-700 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl mb-4 lg:mb-6 flex items-center gap-2 text-xs lg:text-sm">
+                    <span class="material-icons text-sm">check_circle</span>
+                    <%= success %>
+                </div>
+            <% } %>
+
+            <% if (error) { %>
+                <div class="bg-red-50 border border-red-200 text-red-700 px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl mb-4 lg:mb-6 flex items-center gap-2 text-xs lg:text-sm">
+                    <span class="material-icons text-sm">error</span>
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <!-- Profile Card -->
+            <div class="bg-white rounded-xl lg:rounded-2xl shadow-sm border border-slate-100 p-4 lg:p-6 mb-4 lg:mb-6 card-hover">
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-4 lg:mb-6 text-center sm:text-left">
+                    <% if (user && user.avatar_url) { %>
+                        <img src="<%= user.avatar_url %>" alt="Avatar" class="w-16 lg:w-20 h-16 lg:h-20 rounded-full object-cover shadow mx-auto sm:mx-0">
+                    <% } else { %>
+                        <div class="w-16 lg:w-20 h-16 lg:h-20 rounded-full bg-slate-200 flex items-center justify-center shadow mx-auto sm:mx-0">
+                            <span class="material-icons text-3xl lg:text-4xl text-slate-400">account_circle</span>
+                        </div>
+                    <% } %>
+                    <div>
+                        <h2 class="text-lg lg:text-xl font-bold text-slate-900"><%= user ? user.username : '' %></h2>
+                        <span class="text-xs px-2 py-0.5 rounded-full font-semibold uppercase inline-block mt-1 lg:mt-0 <%= user && user.role === 'super_admin' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700' %>">
+                            <%= user && user.role === 'super_admin' ? 'Super Admin' : 'Admin' %>
+                        </span>
+                        <p class="text-xs lg:text-sm text-slate-500 mt-1.5 lg:mt-1">Anggota sejak <%= user ? new Date(user.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '' %></p>
+                    </div>
+                </div>
+
+                <!-- Profile Info Form -->
+                <form method="POST" action="/auth/profile/update" enctype="multipart/form-data">
+                    <h3 class="text-base lg:text-lg font-bold text-slate-900 mb-3 lg:mb-4 flex items-center gap-2">
+                        <span class="material-icons text-blue-500 text-sm lg:text-base">person</span>
+                        Informasi Profil
+                    </h3>
+                    <div class="space-y-3 lg:space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
+                            <div>
+                                <label class="block text-xs lg:text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                                <input type="text" name="full_name" value="<%= user ? user.full_name || '' : '' %>"
+                                    class="w-full border border-slate-300 rounded-lg px-3 py-2 lg:py-2.5 text-xs lg:text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                    placeholder="Masukkan nama lengkap">
+                            </div>
+                            <div>
+                                <label class="block text-xs lg:text-sm font-medium text-slate-700 mb-1">Email</label>
+                                <input type="email" name="email" value="<%= user ? user.email || '' : '' %>"
+                                    class="w-full border border-slate-300 rounded-lg px-3 py-2 lg:py-2.5 text-xs lg:text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                    placeholder="Masukkan email">
+                            </div>
+                        </div>
+                        <div>
+                            <%- include('../admin/components/imageUpload', { 
+                                name: 'avatar', 
+                                existingUrl: user ? user.avatar_url : '',
+                                previewId: 'avatar-preview'
+                            }) %>
+                            <input type="hidden" name="existing_avatar_url" value="<%= user ? user.avatar_url : '' %>">
+                        </div>
+                    </div>
+                    <div class="mt-4 lg:mt-6 flex justify-end">
+                        <button type="submit" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 lg:px-6 py-2 lg:py-2.5 rounded-lg text-xs lg:text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm">
+                            <span class="material-icons text-sm">save</span>
+                            Simpan Profil
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Change Password Form -->
+            <div class="bg-white rounded-xl lg:rounded-2xl shadow-sm border border-slate-100 p-4 lg:p-6 card-hover">
+                <form method="POST" action="/auth/profile/password">
+                    <h3 class="text-base lg:text-lg font-bold text-slate-900 mb-3 lg:mb-4 flex items-center gap-2">
+                        <span class="material-icons text-red-500 text-sm lg:text-base">lock</span>
+                        Ganti Password
+                    </h3>
+                    <div class="space-y-3 lg:space-y-4">
+                        <div>
+                            <label class="block text-xs lg:text-sm font-medium text-slate-700 mb-1">Password Lama</label>
+                            <input type="password" name="current_password" required
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 lg:py-2.5 text-xs lg:text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                placeholder="Masukkan password lama">
+                        </div>
+                        <div>
+                            <label class="block text-xs lg:text-sm font-medium text-slate-700 mb-1">Password Baru</label>
+                            <input type="password" name="new_password" required minlength="6"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 lg:py-2.5 text-xs lg:text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                placeholder="Masukkan password baru (min 6 karakter)">
+                        </div>
+                        <div>
+                            <label class="block text-xs lg:text-sm font-medium text-slate-700 mb-1">Konfirmasi Password</label>
+                            <input type="password" name="confirm_password" required
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 lg:py-2.5 text-xs lg:text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                placeholder="Konfirmasi password baru">
+                        </div>
+                    </div>
+                    <div class="mt-4 lg:mt-6 flex justify-end">
+                        <button type="submit" class="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 lg:px-6 py-2 lg:py-2.5 rounded-lg text-xs lg:text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm">
+                            <span class="material-icons text-sm">lock</span>
+                            Ubah Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <%- include('../admin/partials/_scripts') %>
+</body>
+</html>

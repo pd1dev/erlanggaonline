@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erlangga Online - Browse Websites</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }
+    </script>
+</head>
+
+<body class="bg-gray-950 font-sans min-h-screen text-white">
+
+    <!-- Hero -->
+    <div class="relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.15),transparent_50%)]"></div>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 relative z-10 text-center">
+            <div
+                class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full text-blue-400 text-sm font-medium mb-6">
+                <span class="material-icons text-sm">language</span> CMS Multi-Brand Platform
+            </div>
+            <h1
+                class="text-5xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                Browse Websites
+            </h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
+                Pilih salah satu brand website yang tersedia, atau buat brand baru melalui Admin Panel.
+            </p>
+            <a href="/admin"
+                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors shadow-lg shadow-blue-600/20">
+                <span class="material-icons text-sm">dashboard</span> Admin Panel
+            </a>
+        </div>
+    </div>
+
+    <!-- Brand Grid -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-20">
+        <% if (brands.length===0) { %>
+            <div class="text-center py-10 md:py-16">
+                <span class="material-icons text-5xl md:text-7xl text-gray-700">web_asset_off</span>
+                <p class="text-gray-500 mt-4 text-base md:text-lg">Belum ada brand website. Buat melalui Admin Panel.</p>
+            </div>
+            <% } else { %>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <% brands.forEach(brand=> { %>
+                        <a href="/<%= brand.slug %>"
+                            class="group block bg-gray-900 border border-gray-800 rounded-xl md:rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 duration-300">
+                            <div class="h-1.5 md:h-2 w-full"
+                                style="background: linear-gradient(90deg, <%= brand.primary_color %>, <%= brand.accent_color_1 %>)">
+                            </div>
+                            <div class="p-4 md:p-6">
+                                <div class="flex items-center gap-3 mb-3 md:mb-4">
+                                    <% if (brand.logo_url) { %>
+                                        <img src="<%= brand.logo_url %>" alt="<%= brand.name %> logo" class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl object-contain bg-white p-1 shadow-lg border border-gray-800">
+                                    <% } else { %>
+                                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center font-bold text-white text-base md:text-lg shadow-lg"
+                                            style="background: <%= brand.primary_color %>">
+                                            <%= brand.logo_initial %>
+                                        </div>
+                                    <% } %>
+                                    <div>
+                                        <h3 class="font-bold text-white group-hover:text-blue-400 transition-colors text-sm md:text-base">
+                                            <%= brand.name %>
+                                        </h3>
+                                        <p class="text-xs text-gray-500">
+                                            <%= brand.template_name %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <p class="text-xs md:text-sm text-gray-400 line-clamp-2 mb-3 md:mb-4">
+                                    <%= brand.tagline || 'No description' %>
+                                </p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-600 font-mono bg-gray-800 px-2 py-0.5 md:py-1 rounded">/<%=
+                                            brand.slug %></span>
+                                    <span
+                                        class="material-icons text-gray-600 group-hover:text-blue-400 transition-colors text-sm">arrow_forward</span>
+                                </div>
+                            </div>
+                        </a>
+                        <% }); %>
+                </div>
+                <% } %>
+    </div>
+
+</body>
+
+</html>

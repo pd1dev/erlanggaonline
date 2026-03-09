@@ -1,0 +1,344 @@
+<%- include('../partials/_head', { title: 'Create New Brand' }) %>
+<body class="bg-slate-100 font-sans antialiased">
+<%- include('../partials/_sidebar', { user, activePage: 'brands' }) %>
+
+    <!-- Main Content -->
+    <div id="main-content" class="sidebar-transition ml-0 lg:ml-64">
+        <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4">
+            <div class="flex items-center gap-3">
+                <a href="/admin/brands" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 lg:hidden">
+                    <span class="material-icons text-sm">arrow_back</span>
+                </a>
+                <button onclick="toggleMobileSidebar()" class="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100">
+                    <span class="material-icons text-sm">menu</span>
+                </button>
+                <h1 class="text-base font-semibold text-slate-800">Create New Brand</h1>
+            </div>
+        </header>
+
+        <main class="p-3">
+            <!-- Progress -->
+            <div class="max-w-6xl mx-auto mb-4">
+                <div class="flex items-center justify-center gap-2" id="progress-steps">
+                    <div class="flex items-center gap-1" id="indicator-1">
+                        <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold" id="step-num-1">1</div>
+                        <span class="text-xs text-blue-600 font-medium">Pilih Template</span>
+                    </div>
+                    <div class="w-8 h-0.5 bg-slate-200" id="line-1"></div>
+                    <div class="flex items-center gap-1" id="indicator-2">
+                        <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold" id="step-num-2">2</div>
+                        <span class="text-xs text-slate-400">Info Dasar</span>
+                    </div>
+                    <div class="w-8 h-0.5 bg-slate-200" id="line-2"></div>
+                    <div class="flex items-center gap-1" id="indicator-3">
+                        <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold" id="step-num-3">3</div>
+                        <span class="text-xs text-slate-400">Selesai</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Template -->
+            <div id="step-1" class="step active">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-3">
+                        <h2 class="text-lg font-bold text-slate-900">Pilih Template</h2>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-2 mb-3">
+                        <% templates.forEach((template, idx) => { %>
+                            <div class="template-card bg-white rounded-lg border-2 border-slate-200 overflow-hidden cursor-pointer hover:border-blue-300"
+                                onclick="selectTemplate(<%= template.id %>, '<%= template.file_path %>')"
+                                id="template-card-<%= template.id %>">
+                                <div class="aspect-[4/3] bg-gradient-to-br <%= ['from-slate-800 to-slate-900', 'from-blue-800 to-indigo-900', 'from-teal-800 to-cyan-900', 'from-purple-800 to-fuchsia-900'][idx % 4] %> p-1">
+                                    <div class="bg-white rounded h-full">
+                                        <div class="h-2 bg-slate-100 flex items-center px-1 gap-0.5">
+                                            <div class="w-1 h-1 rounded-full bg-red-400"></div>
+                                            <div class="w-1 h-1 rounded-full bg-yellow-400"></div>
+                                            <div class="w-1 h-1 rounded-full bg-green-400"></div>
+                                        </div>
+                                        <div class="p-1">
+                                            <div class="h-1 w-8 bg-slate-300 rounded"></div>
+                                            <div class="h-3 bg-slate-200 rounded mt-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-1.5 text-center">
+                                    <h3 class="font-medium text-xs"><%= template.name %></h3>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+
+                    <!-- Preview Panel -->
+                    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden mb-3">
+                        <div class="bg-slate-50 px-3 py-2 border-b border-slate-200 flex items-center justify-between">
+                            <span class="text-xs font-medium text-slate-600">Preview</span>
+                            <span class="text-xs text-slate-400">Klik template untuk melihat preview</span>
+                        </div>
+                        <div class="bg-slate-900 p-2">
+                            <iframe id="preview-frame-step1" class="w-full rounded" style="height: 280px;" src=""></iframe>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button onclick="goToStep(2)" id="btn-next-1" disabled class="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                            Lanjut
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Form -->
+            <div id="step-2" class="step">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-3">
+                        <h2 class="text-lg font-bold text-slate-900">Informasi Dasar Brand</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                        <div class="bg-white rounded-xl border border-slate-200 p-4">
+                            <form id="brand-form" method="POST" action="/admin/brands/create/wizard" enctype="multipart/form-data">
+                                <input type="hidden" name="template_id" id="selected-template-id">
+
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-700 mb-1">Nama Brand *</label>
+                                        <input type="text" name="name" id="input-name" required placeholder="Contoh: Toko Saya" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-700 mb-1">URL Slug *</label>
+                                        <div class="flex">
+                                            <span class="px-3 py-2 bg-slate-50 border border-r-0 border-slate-200 rounded-l-lg text-xs text-slate-500">localhost:3000/</span>
+                                            <input type="text" name="slug" id="input-slug" required placeholder="tokosaya" pattern="[a-z0-9-]+" class="flex-1 px-3 py-2 border border-slate-200 rounded-r-lg text-sm focus:border-blue-500 focus:outline-none">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-700 mb-1">Tagline</label>
+                                        <input type="text" name="tagline" id="input-tagline" placeholder="Deskripsi brand" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none">
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-sm font-medium text-slate-700 mb-1">Warna Primer</label>
+                                            <div class="flex gap-2">
+                                                <input type="color" name="primary_color" id="input-color" value="#3b82f6" class="w-10 h-10 rounded-lg cursor-pointer" oninput="syncColor(this.value)">
+                                                <input type="text" id="input-color-text" value="#3b82f6" class="flex-1 px-2 py-1 border border-slate-200 rounded-lg text-xs" oninput="syncColorPicker(this.value)">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-slate-700 mb-1">Logo Initial</label>
+                                            <input type="text" name="logo_initial" id="input-logo" maxlength="2" placeholder="B" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-between mt-4">
+                                    <button type="button" onclick="goToStep(1)" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">Kembali</button>
+                                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">Buat Brand</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                            <div class="bg-slate-50 px-3 py-2 border-b border-slate-200">
+                                <span class="text-xs font-medium text-slate-600">Preview</span>
+                            </div>
+                            <div class="bg-slate-900 p-2">
+                                <iframe id="preview-frame" class="w-full rounded" style="height: 350px;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Success -->
+            <div id="step-3" class="step">
+                <div class="max-w-md mx-auto text-center py-8">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="material-icons text-3xl text-green-600">check_circle</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">Brand Berhasil Dibuat!</h2>
+                    <p class="text-sm text-slate-500 mb-4">Brand Anda telah dibuat. Sekarang bisa edit pengaturan lanjutan.</p>
+                    <div class="flex justify-center gap-2 mb-3">
+                        <a id="preview-link" href="#" target="_blank" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium flex items-center gap-1">
+                            <span class="material-icons text-sm">visibility</span>
+                            Lihat Website
+                        </a>
+                        <a id="edit-link" href="#" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">Edit Brand</a>
+                    </div>
+                    <a href="/admin/brands" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">Lihat Semua Brand</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <style>
+        .step { display: none; }
+        .step.active { display: block; }
+    </style>
+
+    <script>
+        let currentStep = 1;
+        let selectedTemplateId = null;
+        let selectedTemplatePath = null;
+
+        function selectTemplate(id, path) {
+            selectedTemplateId = id;
+            selectedTemplatePath = path;
+            
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.classList.remove('border-blue-500', 'border-slate-200');
+                card.classList.add('border-slate-200');
+            });
+            
+            const card = document.getElementById('template-card-' + id);
+            card.classList.remove('border-slate-200');
+            card.classList.add('border-blue-500');
+            
+            document.getElementById('btn-next-1').disabled = false;
+            
+            // Load preview in Step 1
+            const previewFrame = document.getElementById('preview-frame-step1');
+            if (previewFrame) {
+                previewFrame.src = '/preview/template/' + id + '?preview=true';
+            }
+        }
+
+        function goToStep(step) {
+            // Hide current step
+            document.getElementById('step-' + currentStep).classList.remove('active');
+            
+            // Show step
+            document.getElementById('step-' + step).classList.add('active');
+            
+            // Update progress indicators
+            updateProgress(step);
+            
+            // Initialize preview for step 2
+            if (step === 2 && selectedTemplateId) {
+                document.getElementById('selected-template-id').value = selectedTemplateId;
+                document.getElementById('preview-frame').src = '/preview/template/' + selectedTemplateId + '?preview=true';
+            }
+            
+            currentStep = step;
+        }
+
+        // Color sync functions
+        function syncColor(value) {
+            document.getElementById('input-color-text').value = value;
+            updateLivePreview();
+        }
+
+        function syncColorPicker(value) {
+            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                document.getElementById('input-color').value = value;
+                updateLivePreview();
+            }
+        }
+
+        // Live preview update function
+        function updateLivePreview() {
+            const previewFrame = document.getElementById('preview-frame');
+            if (!previewFrame || !selectedTemplateId) return;
+
+            const name = encodeURIComponent(document.getElementById('input-name')?.value || 'Brand Anda');
+            const tagline = encodeURIComponent(document.getElementById('input-tagline')?.value || 'Solusi terbaik untuk kebutuhan Anda');
+            const color = encodeURIComponent(document.getElementById('input-color')?.value || '#3b82f6');
+            const logo = encodeURIComponent(document.getElementById('input-logo')?.value || 'B');
+
+            previewFrame.src = `/preview/template/${selectedTemplateId}?preview=true&name=${name}&tagline=${tagline}&primary_color=${color}&logo_initial=${logo}`;
+        }
+
+        // Add event listeners for live preview
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('input-name');
+            const taglineInput = document.getElementById('input-tagline');
+            const logoInput = document.getElementById('input-logo');
+
+            if (nameInput) nameInput.addEventListener('input', updateLivePreview);
+            if (taglineInput) taglineInput.addEventListener('input', updateLivePreview);
+            if (logoInput) logoInput.addEventListener('input', updateLivePreview);
+        });
+
+        function updateProgress(step) {
+            for (let i = 1; i <= 3; i++) {
+                const num = document.getElementById('step-num-' + i);
+                const ind = document.getElementById('indicator-' + i);
+                const span = ind.querySelector('span');
+                
+                if (i < step) {
+                    num.className = 'w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-bold';
+                    num.textContent = '✓';
+                    span.className = 'text-xs text-green-500 font-medium';
+                } else if (i === step) {
+                    num.className = 'w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold';
+                    span.className = 'text-xs text-blue-600 font-medium';
+                } else {
+                    num.className = 'w-7 h-7 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold';
+                    span.className = 'text-xs text-slate-400';
+                }
+            }
+            
+            document.getElementById('line-1').className = step > 1 ? 'w-8 h-0.5 bg-green-500' : 'w-8 h-0.5 bg-slate-200';
+            document.getElementById('line-2').className = step > 2 ? 'w-8 h-0.5 bg-green-500' : 'w-8 h-0.5 bg-slate-200';
+        }
+
+        // Form submit
+        document.getElementById('brand-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch('/admin/brands/create/wizard', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('edit-link').href = '/admin/brands/' + data.brandUuid + '/edit';
+                    const slug = document.getElementById('input-slug').value || data.brandUuid;
+                    document.getElementById('preview-link').href = '/' + slug;
+                    goToStep(3);
+                } else {
+                    alert('Terjadi kesalahan: ' + data.message);
+                }
+            } catch(err) {
+                console.error(err);
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            }
+        });
+    </script>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden hidden"></div>
+
+    <script>
+        function toggleMobileSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                if (overlay) overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                if (overlay) overlay.classList.add('hidden');
+            }
+        }
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                var overlay = document.getElementById('mobile-overlay');
+                var sidebar = document.getElementById('sidebar');
+                if (overlay) overlay.classList.add('hidden');
+                if (sidebar) sidebar.classList.remove('-translate-x-full');
+            }
+        });
+    </script>
+</body>
+</html>

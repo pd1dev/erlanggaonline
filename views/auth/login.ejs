@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Admin - Login</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }
+    </script>
+</head>
+
+<body class="bg-gray-950 font-sans min-h-screen flex items-center justify-center">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.15),transparent_50%)]"></div>
+
+    <div class="relative z-10 w-full max-w-md px-4">
+        <div class="text-center mb-8">
+            <div
+                class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/30 mb-4">
+                <span class="material-icons text-white text-3xl">dashboard</span>
+            </div>
+            <h1 class="text-2xl font-bold text-white">CMS Admin</h1>
+            <p class="text-gray-400 text-sm mt-1">Masuk ke panel admin</p>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-2xl">
+            <% if (error) { %>
+                <div
+                    class="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl mb-6 flex items-center gap-2 text-sm">
+                    <span class="material-icons text-sm">error</span>
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <form method="POST" action="/auth/login">
+                        <div class="mb-5">
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
+                            <div class="relative">
+                                <span
+                                    class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl">person</span>
+                                <input type="text" name="username" required autofocus
+                                    class="w-full bg-gray-800 border border-gray-700 text-white rounded-xl pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition-colors"
+                                    placeholder="Masukkan username">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                            <div class="relative">
+                                <span
+                                    class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl">lock</span>
+                                <input type="password" name="password" required
+                                    class="w-full bg-gray-800 border border-gray-700 text-white rounded-xl pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 transition-colors"
+                                    placeholder="Masukkan password">
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 group">
+                            <span
+                                class="material-icons text-sm group-hover:translate-x-0.5 transition-transform">login</span>
+                            Masuk
+                        </button>
+                    </form>
+        </div>
+
+        <p class="text-center text-gray-600 text-xs mt-6">
+            &copy; 2024 CMS Multi-Brand Platform
+        </p>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= brand.name %></title>
+    <link rel="icon" type="image/jpeg" href="<%= brand.logo_url || '/favicon.jpg' %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['DM Sans', 'sans-serif'] },
+                    colors: {
+                        primary: '<%= brand.primary_color || "#6366f1" %>',
+                        'primary-hover': '<%= brand.primary_hover_color || "#4f46e5" %>'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --neu-bg: #e8ecf0;
+            --neu-shadow-light: #ffffff;
+            --neu-shadow-dark: #c5cad1;
+            --neu-text: #2d3748;
+        }
+        .dark {
+            --neu-bg: #1a1d26;
+            --neu-shadow-light: #252936;
+            --neu-shadow-dark: #0d0f13;
+            --neu-text: #e2e8f0;
+        }
+        .neu-flat {
+            background: var(--neu-bg);
+            box-shadow: 8px 8px 16px var(--neu-shadow-dark), -8px -8px 16px var(--neu-shadow-light);
+        }
+        .neu-pressed {
+            background: var(--neu-bg);
+            box-shadow: inset 6px 6px 12px var(--neu-shadow-dark), inset -6px -6px 12px var(--neu-shadow-light);
+        }
+        .neu-btn {
+            background: var(--neu-bg);
+            box-shadow: 6px 6px 12px var(--neu-shadow-dark), -6px -6px 12px var(--neu-shadow-light);
+            transition: all 0.2s ease;
+        }
+        .neu-btn:hover {
+            box-shadow: 4px 4px 8px var(--neu-shadow-dark), -4px -4px 8px var(--neu-shadow-light);
+        }
+        .neu-btn:active {
+            box-shadow: inset 4px 4px 8px var(--neu-shadow-dark), inset -4px -4px 8px var(--neu-shadow-light);
+        }
+    </style>
+</head>
+<body class="font-sans transition-colors duration-300 bg-[var(--neu-bg)] min-h-screen text-[var(--neu-text)]">
+    <script>
+        if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <% var navLinksList = typeof navLinks !== 'undefined' ? navLinks : []; %>
+    
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 neu-flat">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <% if (brand.logo_url) { %>
+                        <img src="<%= brand.logo_url %>" alt="<%= brand.name %>" class="h-10 w-auto rounded-xl">
+                    <% } else { %>
+                        <div class="h-10 w-10 rounded-xl flex items-center justify-center font-bold text-white text-xl shadow-lg" style="background: <%= brand.primary_color %>">
+                            <%= brand.logo_initial || brand.name.charAt(0).toUpperCase() %>
+                        </div>
+                    <% } %>
+                    <span class="font-bold text-xl"><%= brand.name %></span>
+                </div>
+                
+                <nav class="hidden md:flex items-center gap-6">
+                    <% navLinksList.forEach(link => { %>
+                        <% if (link.is_button) { %>
+                            <a href="<%= link.href %>" class="px-6 py-2.5 rounded-xl font-semibold text-white neu-btn" style="background: <%= brand.primary_color %>">
+                                <%= link.label %>
+                            </a>
+                        <% } else { %>
+                            <a href="<%= link.href %>" class="font-medium hover:text-primary transition-colors">
+                                <%= link.label %>
+                            </a>
+                        <% } %>
+                    <%}); %>
+                </nav>
+                
+                <button onclick="toggleDarkMode()" class="p-3 rounded-xl neu-btn hover:text-primary">
+                    <span id="dark-icon" class="material-icons">dark_mode</span>
+                    <span id="light-icon" class="material-icons hidden">light_mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <% var hero = typeof sections !== 'undefined' && sections.hero ? sections.hero : {}; %>
+        <% var hasHero = hero.badge || hero.heading_line1 || hero.heading_line2 || hero.description; %>
+        <% if (hasHero) { %>
+        <!-- Hero Section -->
+        <section class="min-h-[85vh] flex items-center justify-center py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 <%= hero.hero_image_url ? 'grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-left' : 'text-center max-w-5xl' %>">
+                <div class="<%= hero.hero_image_url ? '' : 'mx-auto' %>">
+                    <% if (hero.badge) { %>
+                    <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl neu-flat mb-10">
+                        <span class="w-2.5 h-2.5 rounded-full animate-pulse" style="background: <%= brand.primary_color %>"></span>
+                        <span class="text-sm font-semibold"><%= hero.badge %></span>
+                    </div>
+                    <% } %>
+                    
+                    <% if (hero.heading_line1) { %>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+                        <%= hero.heading_line1 %>
+                    </h1>
+                    <% } %>
+                    
+                    <% if (hero.heading_line2) { %>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight" style="color: <%= brand.primary_color %>">
+                        <%= hero.heading_line2 %>
+                    </h1>
+                    <% } %>
+                    
+                    <% if (hero.description) { %>
+                    <p class="text-xl mb-12 <%= hero.hero_image_url ? 'max-w-xl' : 'max-w-2xl mx-auto' %> opacity-75 leading-relaxed">
+                        <%= hero.description %>
+                    </p>
+                    <% } %>
+                    
+                    <div class="flex flex-wrap <%= hero.hero_image_url ? 'justify-start' : 'justify-center' %> gap-5">
+                        <% if (hero.cta_primary_text) { %>
+                        <a href="<%= hero.cta_primary_href || '#' %>" class="px-10 py-5 rounded-2xl font-bold text-white shadow-2xl hover:scale-105 transition-transform neu-btn" style="background: <%= brand.primary_color %>">
+                            <%= hero.cta_primary_text %>
+                        </a>
+                        <% } %>
+                        <% if (hero.cta_secondary_text) { %>
+                        <a href="<%= hero.cta_secondary_href || '#' %>" class="px-10 py-5 rounded-2xl font-bold neu-flat hover:scale-105 transition-transform">
+                            <%= hero.cta_secondary_text %>
+                        </a>
+                        <% } %>
+                    </div>
+                </div>
+
+                <% if (hero.hero_image_url) { %>
+                <div class="relative mt-12 lg:mt-0">
+                    <div class="neu-flat p-4 rounded-[3rem]">
+                        <img src="<%= hero.hero_image_url %>" alt="<%= hero.heading_line1 %>" class="w-full max-w-lg mx-auto rounded-[2rem]">
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </section>
+        <% } %>
+
+        <% var featuresHeader = typeof sections !== 'undefined' && sections.features_header ? sections.features_header : {}; %>
+        <% var featuresList = typeof features !== 'undefined' ? features : []; %>
+        <% if (featuresHeader.heading || featuresList.length > 0) { %>
+        <!-- Features Section -->
+        <section class="py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <% if (featuresHeader.heading) { %>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                        <%= featuresHeader.heading %>
+                        <% if (featuresHeader.heading_highlight) { %>
+                        <span style="color: <%= brand.primary_color %>"><%= featuresHeader.heading_highlight %></span>
+                        <% } %>
+                    </h2>
+                    <% } %>
+                    <% if (featuresHeader.description) { %>
+                    <p class="text-lg opacity-70 max-w-2xl mx-auto"><%= featuresHeader.description %></p>
+                    <% } %>
+                </div>
+                
+                <% if (featuresList.length > 0) { %>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <% featuresList.forEach((feature, i) => { %>
+                    <div class="neu-flat rounded-3xl p-8 text-center hover:scale-[1.02] transition-transform">
+                        <div class="w-18 h-18 mx-auto mb-6 rounded-2xl neu-pressed flex items-center justify-center">
+                            <span class="material-icons text-3xl" style="color: <%= brand.primary_color %>"><%= feature.icon || 'star' %></span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3"><%= feature.title %></h3>
+                        <p class="opacity-70"><%= feature.description %></p>
+                    </div>
+                    <% }); %>
+                </div>
+                <% } %>
+            </div>
+        </section>
+        <% } %>
+
+        <% var catalogHeader = typeof sections !== 'undefined' && sections.catalog_header ? sections.catalog_header : {}; %>
+        <% var productsList = typeof products !== 'undefined' ? products : []; %>
+        <% if (catalogHeader.heading || productsList.length > 0) { %>
+        <!-- Products Section -->
+        <section class="py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <% if (catalogHeader.heading) { %>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4"><%= catalogHeader.heading %></h2>
+                    <% } %>
+                    <% if (catalogHeader.description) { %>
+                    <p class="text-lg opacity-70"><%= catalogHeader.description %></p>
+                    <% } %>
+                </div>
+                
+                <% if (productsList.length > 0) { %>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <% productsList.forEach(product => { %>
+                    <a href="<%= product.product_url || '#' %>" target="<%= product.product_url ? '_blank' : '_self' %>" class="block neu-flat rounded-3xl overflow-hidden group hover:scale-[1.02] transition-all">
+                        <div class="aspect-[3/4] relative overflow-hidden">
+                            <% if (product.image_url) { %>
+                            <img src="<%= product.image_url %>" alt="<%= product.title %>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <% } else { %>
+                            <div class="w-full h-full flex items-center justify-center opacity-30">
+                                <span class="material-icons text-6xl">image</span>
+                            </div>
+                            <% } %>
+                            <% if (product.grade) { %>
+                            <span class="absolute top-4 left-4 px-4 py-1.5 rounded-xl text-xs font-bold text-white shadow-lg" style="background: <%= brand.primary_color %>"><%= product.grade %></span>
+                            <% } %>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-lg mb-2"><%= product.title %></h3>
+                            <% if (product.price) { %>
+                            <p class="font-bold text-xl" style="color: <%= brand.primary_color %>">Rp <%= typeof product.price === 'number' ? product.price.toLocaleString('id-ID') : product.price %></p>
+                            <% } %>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+                <% } %>
+            </div>
+        </section>
+        <% } %>
+
+        <% var cta = typeof sections !== 'undefined' && sections.cta ? sections.cta : {}; %>
+        <% if (cta.heading_prefix || cta.heading_highlight || cta.button1_text) { %>
+        <!-- CTA Section -->
+        <section class="py-24">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="neu-flat rounded-3xl p-16">
+                    <% if (cta.heading_prefix || cta.heading_highlight) { %>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        <%= cta.heading_prefix || '' %> <span style="color: <%= brand.primary_color %>"><%= cta.heading_highlight || '' %></span>
+                    </h2>
+                    <% } %>
+                    <% if (cta.description) { %>
+                    <p class="text-lg opacity-70 mb-10"><%= cta.description %></p>
+                    <% } %>
+                    <% if (cta.button1_text) { %>
+                    <a href="#" class="inline-block px-12 py-5 rounded-2xl font-bold text-white shadow-2xl hover:scale-110 transition-all neu-btn" style="background: <%= brand.primary_color %>">
+                        <%= cta.button1_text %>
+                    </a>
+                    <% } %>
+                </div>
+            </div>
+        </section>
+        <% } %>
+    </main>
+
+    <% var footerLinksList = typeof footerLinks !== 'undefined' ? footerLinks : []; %>
+    <% var socialLinksList = typeof socialLinks !== 'undefined' ? socialLinks : []; %>
+    <% if (footerLinksList.length > 0 || socialLinksList.length > 0 || brand.copyright_text) { %>
+    <!-- Footer -->
+    <footer class="py-12 neu-flat">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <% if (brand.logo_url) { %>
+                        <img src="<%= brand.logo_url %>" alt="<%= brand.name %>" class="h-8 rounded-xl">
+                    <% } else { %>
+                        <div class="h-8 w-8 rounded-xl flex items-center justify-center font-bold text-white" style="background: <%= brand.primary_color %>">
+                            <%= brand.logo_initial || brand.name.charAt(0).toUpperCase() %>
+                        </div>
+                    <% } %>
+                    <span class="font-bold"><%= brand.name %></span>
+                </div>
+                
+                <% if (footerLinksList.length > 0) { %>
+                <div class="flex flex-wrap gap-6">
+                    <% footerLinksList.forEach(link => { %>
+                    <a href="<%= link.href %>" class="opacity-70 hover:opacity-100 hover:text-primary transition-all"><%= link.label %></a>
+                    <% }); %>
+                </div>
+                <% } %>
+                
+                <% if (socialLinksList.length > 0) { %>
+                <div class="flex gap-3">
+                    <% socialLinksList.forEach(social => { %>
+                    <a href="<%= social.href %>" class="w-10 h-10 rounded-xl neu-btn flex items-center justify-center hover:scale-110 transition-transform">
+                        <span class="material-icons text-sm"><%= social.icon %></span>
+                    </a>
+                    <% }); %>
+                </div>
+                <% } %>
+            </div>
+            
+            <% if (brand.copyright_text) { %>
+            <div class="mt-8 pt-8 border-t border-opacity-20 text-center opacity-50 text-sm">
+                <%= brand.copyright_text %>
+            </div>
+            <% } %>
+        </div>
+    </footer>
+    <% } %>
+
+    <script>
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            
+            const darkIcon = document.getElementById('dark-icon');
+            const lightIcon = document.getElementById('light-icon');
+            
+            if (isDark) {
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+            } else {
+                darkIcon.classList.remove('hidden');
+                lightIcon.classList.add('hidden');
+            }
+        }
+        
+        if (document.documentElement.classList.contains('dark')) {
+            document.getElementById('dark-icon').classList.add('hidden');
+            document.getElementById('light-icon').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

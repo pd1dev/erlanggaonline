@@ -1,0 +1,1084 @@
+<%- include('../partials/_head', { title: brand ? 'Edit ' + brand.name : 'Create Brand' }) %>
+<body class="bg-slate-100 font-sans antialiased">
+<%- include('../partials/_sidebar', { user, activePage: 'brands' }) %>
+
+    <!-- Main Content -->
+    <div id="main-content" class="sidebar-transition ml-0 lg:ml-64">
+        <%- include('../partials/_header', { title: 'Brands', user }) %>
+
+        <main class="p-3 md:p-6 page-enter">
+
+            <% if (typeof error !=='undefined' && error) { %>
+                <div class="bg-red-50 border border-red-200 text-red-700 px-3 md:px-4 py-2 md:py-3 rounded-lg md:rounded-xl mb-4 md:mb-6 flex items-center gap-2 text-sm">
+                    <span class="material-icons text-sm">error</span>
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <% if (typeof success !=='undefined' && success) { %>
+                <div class="bg-green-50 border border-green-200 text-green-700 px-3 md:px-4 py-2 md:py-3 rounded-lg md:rounded-xl mb-4 md:mb-6 flex items-center gap-2 text-sm">
+                    <span class="material-icons text-sm">check_circle</span>
+                    <%= success %>
+                </div>
+            <% } %>
+
+                <!-- Breadcrumb -->
+                <div class="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-500 mb-4 md:mb-6">
+                    <a href="/admin" class="hover:text-slate-700">Dashboard</a>
+                    <span class="material-icons text-xs">chevron_right</span>
+                    <a href="/admin/brands" class="hover:text-slate-700">Brands</a>
+                    <span class="material-icons text-xs">chevron_right</span>
+                    <span class="text-slate-900 font-medium">
+                        <%= brand ? brand.name : 'New Brand' %>
+                    </span>
+                </div>
+
+                <h1 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6">
+                    <%= brand ? 'Edit: ' + brand.name : 'Create New Brand' %>
+                </h1>
+
+                <!-- LAYOUT 2 KOLOM -->
+                <div class="flex flex-col lg:flex-row gap-6 items-start">
+
+                <!-- KOLOM 1: Form Editor -->
+                <div class="w-full flex-1 min-w-0 flex flex-col">
+
+                        <!-- Tabs -->
+                        <% const tabs = [
+                            { id: 'brand', label: 'Brand', icon: 'storefront' },
+                            { id: 'hero', label: 'Hero', icon: 'view_carousel' },
+                            { id: 'features', label: 'Fitur', icon: 'star' },
+                            { id: 'cta', label: 'CTA', icon: 'campaign' },
+                            { id: 'catalog', label: 'Katalog', icon: 'inventory_2' },
+                            { id: 'products', label: 'Produk', icon: 'menu_book' },
+                            { id: 'navigation', label: 'Navigasi', icon: 'menu' },
+                            { id: 'footer', label: 'Footer', icon: 'copyright' }
+                        ]; %>
+                        <div class="mb-4 md:mb-6 w-full overflow-hidden">
+                            <div class="flex flex-wrap gap-1 bg-gray-100 p-1 rounded-xl w-full">
+                                <% tabs.forEach(tab=> { %>
+                                    <a href="?tab=<%= tab.id %>"
+                                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap flex items-center gap-1.5 <%= activeTab === tab.id ? 'bg-white text-blue-600 shadow-sm ring-1 ring-gray-200' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' %>">
+                                        <span class="material-icons text-sm"><%= tab.icon %></span>
+                                        <%= tab.label %>
+                                    </a>
+                                <%}); %>
+                            </div>
+                        </div>
+
+                        <% if (activeTab === 'brand') { %>
+                        <!-- BRAND SETTINGS -->
+                        <form method="POST" enctype="multipart/form-data"
+                            action="<%= brand ? '/admin/brands/' + brand.uuid + '/update' : '/admin/brands/create' %>">
+                            <!-- Template Selection -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-4">
+                                <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                    <span class="material-icons text-blue-500 text-sm">dashboard</span> Pilih Template
+                                </h2>
+                                
+                                <!-- Template Cards - 4 Columns -->
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mb-3">
+                                    <% templates.forEach((template, idx) => { %>
+                                        <div class="template-card bg-gray-50 rounded-lg border-2 border-gray-200 overflow-hidden cursor-pointer transition-all hover:border-blue-300 hover:shadow-sm <%= brand && brand.template_id == template.id ? 'border-blue-500 ring-2 ring-blue-200' : '' %>"
+                                            onclick="selectTemplateEdit(<%= template.id %>, '<%= template.file_path %>')"
+                                            id="template-card-edit-<%= template.id %>">
+                                            <div class="relative aspect-[4/3] <%= ['from-slate-900 via-slate-800 to-slate-900', 'from-blue-900 via-blue-800 to-indigo-900', 'from-emerald-900 via-teal-800 to-cyan-900', 'from-violet-900 via-purple-800 to-fuchsia-900'][idx % 4] %>">
+                                                <div class="absolute inset-0.5 p-0.5">
+                                                    <div class="w-full h-full bg-white rounded overflow-hidden">
+                                                        <div class="h-2 bg-gray-100 flex items-center px-1 gap-0.5">
+                                                            <div class="w-1 h-1 rounded-full bg-red-400"></div>
+                                                            <div class="w-1 h-1 rounded-full bg-yellow-400"></div>
+                                                            <div class="w-1 h-1 rounded-full bg-green-400"></div>
+                                                        </div>
+                                                        <div class="p-0.5 space-y-0.5">
+                                                            <div class="h-1 w-8 bg-gray-300 rounded"></div>
+                                                            <div class="h-3 w-full bg-gray-200 rounded"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="selected-check absolute top-0.5 right-0.5 w-4 h-4 <%= brand && brand.template_id == template.id ? 'bg-blue-500' : 'bg-gray-400' %> rounded-full flex items-center justify-center">
+                                                    <span class="material-icons text-white text-xs">check</span>
+                                                </div>
+                                            </div>
+                                            <div class="p-1.5 text-center">
+                                                <h3 class="font-medium text-xs text-gray-700"><%= template.name %></h3>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                                
+                                <input type="hidden" name="template_id" id="selected-template-id-edit" value="<%= brand ? brand.template_id : '' %>">
+                            </div>
+
+                            <!-- Brand Settings -->
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <span class="material-icons text-blue-500">storefront</span> Brand Settings
+                                </h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Brand Name</label>
+                                        <input type="text" name="name" value="<%= brand ? brand.name : '' %>"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                                            required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">URL Slug</label>
+                                        <div class="flex items-center">
+                                            <span class="text-gray-400 text-sm mr-1">localhost:3000/</span>
+                                            <input type="text" name="slug" value="<%= brand ? brand.slug : '' %>"
+                                                class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                                                required pattern="[a-z0-9-]+"
+                                                title="Lowercase letters, numbers, and hyphens only">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Logo Text
+                                            (Navbar)</label>
+                                        <input type="text" name="logo_text" value="<%= brand ? brand.logo_text : '' %>"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Logo Initial
+                                            (Fallback)</label>
+                                        <input type="text" name="logo_initial"
+                                            value="<%= brand ? brand.logo_initial : '' %>" maxlength="2"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                                            placeholder="e.g. E">
+                                        <p class="text-xs text-gray-400 mt-1">Hanya ditampilkan jika Logo URL kosong</p>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <%- include('../components/imageUpload', { 
+                                            name: 'logo', 
+                                            existingUrl: brand ? brand.logo_url : '',
+                                            previewId: 'logo-preview'
+                                        }) %>
+                                        <input type="hidden" name="existing_logo_url" value="<%= brand ? brand.logo_url : '' %>">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Powered By</label>
+                                        <input type="text" name="powered_by"
+                                            value="<%= brand ? brand.powered_by : '' %>"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Tagline / Footer
+                                            Description</label>
+                                        <textarea name="tagline" rows="2"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"><%= brand ? brand.tagline : '' %></textarea>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Copyright
+                                            Text</label>
+                                        <input type="text" name="copyright_text"
+                                            value="<%= brand ? brand.copyright_text : '' %>"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                </div>
+
+                                <!-- Colors -->
+                                <h3 class="text-sm font-bold text-gray-700 mt-6 mb-3 flex items-center gap-2">
+                                    <span class="material-icons text-sm text-blue-500">palette</span> Brand Colors
+                                </h3>
+                                <!-- Color preview strip -->
+                                <div class="flex gap-1 mb-4 rounded-xl overflow-hidden h-3 shadow-inner">
+                                    <div id="preview_primary_color" class="flex-1"
+                                        style="background: <%= brand ? brand.primary_color : '#0056b3' %>"></div>
+                                    <div id="preview_primary_hover_color" class="flex-1"
+                                        style="background: <%= brand ? brand.primary_hover_color : '#004494' %>"></div>
+                                    <div id="preview_accent_color_1" class="flex-1"
+                                        style="background: <%= brand ? brand.accent_color_1 : '#76bc43' %>"></div>
+                                    <div id="preview_accent_color_2" class="flex-1"
+                                        style="background: <%= brand ? brand.accent_color_2 : '#6658a6' %>"></div>
+                                    <div id="preview_accent_color_3" class="flex-1"
+                                        style="background: <%= brand ? brand.accent_color_3 : '#f58220' %>"></div>
+                                </div>
+                                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Primary</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="color" name="primary_color"
+                                                value="<%= brand ? brand.primary_color : '#0056b3' %>"
+                                                class="color-picker w-10 h-10 rounded-lg border-2 border-gray-200 cursor-pointer p-0.5"
+                                                data-preview="preview_primary_color">
+                                            <div class="flex-1">
+                                                <input type="text"
+                                                    class="color-hex w-full border border-gray-300 rounded-lg px-2 py-1 text-xs font-mono text-center"
+                                                    value="<%= brand ? brand.primary_color : '#0056b3' %>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Primary
+                                            Hover</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="color" name="primary_hover_color"
+                                                value="<%= brand ? brand.primary_hover_color : '#004494' %>"
+                                                class="color-picker w-10 h-10 rounded-lg border-2 border-gray-200 cursor-pointer p-0.5"
+                                                data-preview="preview_primary_hover_color">
+                                            <div class="flex-1">
+                                                <input type="text"
+                                                    class="color-hex w-full border border-gray-300 rounded-lg px-2 py-1 text-xs font-mono text-center"
+                                                    value="<%= brand ? brand.primary_hover_color : '#004494' %>"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Accent 1
+                                            (Green)</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="color" name="accent_color_1"
+                                                value="<%= brand ? brand.accent_color_1 : '#76bc43' %>"
+                                                class="color-picker w-10 h-10 rounded-lg border-2 border-gray-200 cursor-pointer p-0.5"
+                                                data-preview="preview_accent_color_1">
+                                            <div class="flex-1">
+                                                <input type="text"
+                                                    class="color-hex w-full border border-gray-300 rounded-lg px-2 py-1 text-xs font-mono text-center"
+                                                    value="<%= brand ? brand.accent_color_1 : '#76bc43' %>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Accent 2
+                                            (Purple)</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="color" name="accent_color_2"
+                                                value="<%= brand ? brand.accent_color_2 : '#6658a6' %>"
+                                                class="color-picker w-10 h-10 rounded-lg border-2 border-gray-200 cursor-pointer p-0.5"
+                                                data-preview="preview_accent_color_2">
+                                            <div class="flex-1">
+                                                <input type="text"
+                                                    class="color-hex w-full border border-gray-300 rounded-lg px-2 py-1 text-xs font-mono text-center"
+                                                    value="<%= brand ? brand.accent_color_2 : '#6658a6' %>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Accent 3
+                                            (Orange)</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="color" name="accent_color_3"
+                                                value="<%= brand ? brand.accent_color_3 : '#f58220' %>"
+                                                class="color-picker w-10 h-10 rounded-lg border-2 border-gray-200 cursor-pointer p-0.5"
+                                                data-preview="preview_accent_color_3">
+                                            <div class="flex-1">
+                                                <input type="text"
+                                                    class="color-hex w-full border border-gray-300 rounded-lg px-2 py-1 text-xs font-mono text-center"
+                                                    value="<%= brand ? brand.accent_color_3 : '#f58220' %>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 flex justify-end">
+                                    <button type="submit"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors shadow-sm">
+                                        <span class="material-icons text-sm">save</span> Save Brand
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <% } %>
+
+                        <% if (brand && typeof sections !=='undefined' ) { %>
+
+                            <% if (activeTab === 'hero') { %>
+                            <!-- HERO SECTION -->
+                            <% const hero=sections.hero || {}; %>
+                                <form method="POST" enctype="multipart/form-data" action="/admin/brands/<%= brand.uuid %>/sections/hero">
+                                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                            <span class="material-icons text-green-500">view_carousel</span> Hero
+                                            Section
+                                        </h2>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Badge
+                                                    Text</label>
+                                                <input type="text" name="badge" value="<%= hero.badge || '' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Heading Line
+                                                    1</label>
+                                                <input type="text" name="heading_line1"
+                                                    value="<%= hero.heading_line1 || '' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Heading Line
+                                                    2</label>
+                                                <input type="text" name="heading_line2"
+                                                    value="<%= hero.heading_line2 || '' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Heading Line
+                                                    3</label>
+                                                <input type="text" name="heading_line3"
+                                                    value="<%= hero.heading_line3 || '' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div class="md:col-span-2">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                                <textarea name="description" rows="2"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><%= hero.description || '' %></textarea>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">CTA Primary
+                                                    Text</label>
+                                                <input type="text" name="cta_primary_text"
+                                                    value="<%= hero.cta_primary_text || '' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">CTA Primary
+                                                    Link</label>
+                                                <input type="text" name="cta_primary_href"
+                                                    value="<%= hero.cta_primary_href || '#catalog' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">CTA
+                                                    Secondary
+                                                    Text</label>
+                                                <input type="text" name="cta_secondary_text"
+                                                    value="<%= hero.cta_secondary_text || '' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">CTA
+                                                    Secondary
+                                                    Link</label>
+                                                <input type="text" name="cta_secondary_href"
+                                                    value="<%= hero.cta_secondary_href || '#' %>"
+                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                            </div>
+                                            <div class="md:col-span-2">
+                                                <%- include('../components/imageUpload', { 
+                                                    name: 'hero_image', 
+                                                    existingUrl: hero.hero_image_url || '',
+                                                    previewId: 'hero-image'
+                                                }) %>
+                                                <input type="hidden" name="existing_hero_image_url" value="<%= hero.hero_image_url || '' %>">
+                                            </div>
+                                        </div>
+                                        <div class="mt-4 flex justify-end">
+                                            <button type="submit"
+                                                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                                                <span class="material-icons text-sm">save</span> Save Hero
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <% } %>
+
+                                <% if (activeTab === 'features') { %>
+                                <!-- FEATURES HEADER SECTION -->
+                                <% const fh=sections.features_header || {}; %>
+                                    <form method="POST" action="/admin/brands/<%= brand.uuid %>/sections/features_header">
+                                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                                <span class="material-icons text-purple-500">auto_awesome</span>
+                                                Features
+                                                Section Header
+                                            </h2>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label
+                                                        class="block text-sm font-medium text-gray-700 mb-1">Badge</label>
+                                                    <input type="text" name="badge" value="<%= fh.badge || '' %>"
+                                                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        class="block text-sm font-medium text-gray-700 mb-1">Heading</label>
+                                                    <input type="text" name="heading" value="<%= fh.heading || '' %>"
+                                                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Heading
+                                                        Highlight</label>
+                                                    <input type="text" name="heading_highlight"
+                                                        value="<%= fh.heading_highlight || '' %>"
+                                                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                                    <input type="text" name="description"
+                                                        value="<%= fh.description || '' %>"
+                                                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 flex justify-end">
+                                                <button type="submit"
+                                                    class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                                                    <span class="material-icons text-sm">save</span> Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- FEATURES LIST -->
+                                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                            <span class="material-icons text-purple-500">star</span> Feature Cards
+                                        </h2>
+                                        <% if (features && features.length> 0) { %>
+                                            <div class="space-y-3 mb-4">
+                                                <% features.forEach(f=> { %>
+                                                    <form method="POST"
+                                                        action="/admin/brands/<%= brand.uuid %>/features/<%= f.uuid %>/update"
+                                                        class="bg-gray-50 rounded-xl p-4">
+                                                        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
+                                                            <div>
+                                                                <label class="block text-xs font-medium text-gray-600 mb-1">Icon</label>
+                                                                <%- include('../components/iconSelect', { 
+                                                                    name: 'icon-select-' + f.uuid, 
+                                                                    value: f.icon,
+                                                                    linkedInput: 'icon',
+                                                                    defaultIcons: true
+                                                                }) %>
+                                                            </div>
+                                                            <div>
+                                                                <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                                                                <input type="text" name="title" value="<%= f.title %>"
+                                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm">
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="block text-xs font-medium text-gray-600 mb-1">Color</label>
+                                                                <select name="color_class"
+                                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm">
+                                                                    <option value="primary" <%=f.color_class==='primary'
+                                                                        ? 'selected' : '' %>>Primary</option>
+                                                                    <option value="accent-purple"
+                                                                        <%=f.color_class==='accent-purple' ? 'selected'
+                                                                        : '' %>>Purple</option>
+                                                                    <option value="accent-green"
+                                                                        <%=f.color_class==='accent-green' ? 'selected'
+                                                                        : '' %>>Green</option>
+                                                                </select>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                                                                <input type="number" name="sort_order"
+                                                                    value="<%= f.sort_order %>"
+                                                                    class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm">
+                                                            </div>
+                                                            <div class="flex gap-1">
+                                                                <button type="submit"
+                                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">Save</button>
+                                                                <button type="button"
+                                                                    onclick="this.closest('form').action='/admin/brands/<%= brand.uuid %>/features/<%= f.uuid %>/delete';this.closest('form').submit()"
+                                                                    class="bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1.5 rounded-lg text-xs font-semibold">Del</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <input type="text" name="description"
+                                                                value="<%= f.description %>"
+                                                                class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm"
+                                                                placeholder="Description">
+                                                        </div>
+                                                    </form>
+                                                    <% }); %>
+                                            </div>
+                                            <% } %>
+                                                <form method="POST"
+                                                    action="/admin/brands/<%= brand.uuid %>/features/create"
+                                                    class="bg-blue-50 rounded-xl p-4">
+                                                    <p class="text-sm font-semibold text-blue-700 mb-2">Add New Feature
+                                                    </p>
+                                                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
+                                                        <div>
+                                                            <label class="block text-xs font-medium text-gray-600 mb-1">Icon</label>
+                                                            <%- include('../components/iconSelect', { 
+                                                                name: 'icon', 
+                                                                value: '',
+                                                                defaultIcons: true
+                                                            }) %>
+                                                        </div>
+                                                        <div>
+                                                            <input type="text" name="title" placeholder="Title"
+                                                                class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm"
+                                                                required>
+                                                        </div>
+                                                        <div>
+                                                            <select name="color_class"
+                                                                class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm">
+                                                                <option value="primary">Primary</option>
+                                                                <option value="accent-purple">Purple</option>
+                                                                <option value="accent-green">Green</option>
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <input type="number" name="sort_order" value="0"
+                                                                class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm">
+                                                        </div>
+                                                        <div>
+                                                            <button type="submit"
+                                                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold w-full">Add</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <input type="text" name="description" placeholder="Description"
+                                                            class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm">
+                                                    </div>
+                                                </form>
+                                    </div>
+                                <% } %>
+
+                                <% if (activeTab === 'cta') { %>
+                                    <!-- CTA SECTION -->
+                                    <% const ctaData=sections.cta || {}; %>
+                                        <form method="POST" action="/admin/brands/<%= brand.uuid %>/sections/cta">
+                                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                                <h2
+                                                    class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                                    <span class="material-icons text-orange-500">campaign</span> CTA
+                                                    Section
+                                                </h2>
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700 mb-1">Heading
+                                                            Prefix</label>
+                                                        <input type="text" name="heading_prefix"
+                                                            value="<%= ctaData.heading_prefix || '' %>"
+                                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                    </div>
+                                                    <div>
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700 mb-1">Heading
+                                                            Highlight</label>
+                                                        <input type="text" name="heading_highlight"
+                                                            value="<%= ctaData.heading_highlight || '' %>"
+                                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                    </div>
+                                                    <div class="md:col-span-2">
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                                        <textarea name="description" rows="2"
+                                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><%= ctaData.description || '' %></textarea>
+                                                    </div>
+                                                    <div>
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700 mb-1">Button
+                                                            1
+                                                            Text</label>
+                                                        <input type="text" name="button1_text"
+                                                            value="<%= ctaData.button1_text || '' %>"
+                                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Button 1 Icon</label>
+                                                        <%- include('../components/iconSelect', { 
+                                                            name: 'button1_icon', 
+                                                            value: ctaData.button1_icon || '',
+                                                            defaultIcons: true
+                                                        }) %>
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Button 2 Text</label>
+                                                        <input type="text" name="button2_text"
+                                                            value="<%= ctaData.button2_text || '' %>"
+                                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Button 2 Icon</label>
+                                                        <%- include('../components/iconSelect', { 
+                                                            name: 'button2_icon', 
+                                                            value: ctaData.button2_icon || '',
+                                                            defaultIcons: true
+                                                        }) %>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-4 flex justify-end">
+                                                    <button type="submit"
+                                                        class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                                                        <span class="material-icons text-sm">save</span> Save CTA
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                <% } %>
+
+                                <% if (activeTab === 'catalog') { %>
+                                        <!-- CATALOG HEADER -->
+                                        <% const ch=sections.catalog_header || {}; %>
+                                            <form method="POST"
+                                                action="/admin/brands/<%= brand.uuid %>/sections/catalog_header">
+                                                <div
+                                                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                                    <h2
+                                                        class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                                        <span class="material-icons text-teal-500">inventory_2</span>
+                                                        Catalog Section Header
+                                                    </h2>
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label
+                                                                class="block text-sm font-medium text-gray-700 mb-1">Heading</label>
+                                                            <input type="text" name="heading"
+                                                                value="<%= ch.heading || '' %>"
+                                                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        </div>
+                                                        <div>
+                                                            <label
+                                                                class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                                            <input type="text" name="description"
+                                                                value="<%= ch.description || '' %>"
+                                                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-4 flex justify-end">
+                                                        <button type="submit"
+                                                            class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+                                                            <span class="material-icons text-sm">save</span> Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                <% } %>
+
+                                <% if (activeTab === 'products') { %>
+                                            <!-- PRODUCTS -->
+                                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                                <div class="flex items-center justify-between mb-4">
+                                                    <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                                        <span class="material-icons text-teal-500">menu_book</span>
+                                                        Products
+                                                        (<%= products ? products.length : 0 %>)
+                                                    </h2>
+                                                    <a href="/admin/brands/<%= brand.uuid %>/products/create"
+                                                        class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors">
+                                                        <span class="material-icons text-sm">add</span> Add Product
+                                                    </a>
+                                                </div>
+                                                <% if (products && products.length> 0) { %>
+                                                    <div class="space-y-3">
+                                                        <% products.forEach(p=> { %>
+                                                            <div
+                                                                class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+                                                                <div class="flex items-center gap-4">
+                                                                    <% if (p.image_url) { %>
+                                                                        <img src="<%= p.image_url %>" alt=""
+                                                                            class="w-12 h-16 object-cover rounded-lg shadow-sm">
+                                                                        <% } else { %>
+                                                                            <div
+                                                                                class="w-12 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                                                                <span
+                                                                                    class="material-icons text-gray-400">menu_book</span>
+                                                                            </div>
+                                                                            <% } %>
+                                                                                <div>
+                                                                                    <h4
+                                                                                        class="font-semibold text-gray-900 text-sm">
+                                                                                        <%= p.title %>
+                                                                                    </h4>
+                                                                                    <p class="text-xs text-gray-500">
+                                                                                        <%= p.grade %> · Rp <%=
+                                                                                                p.price.toLocaleString('id-ID')
+                                                                                                %>
+                                                                                                <%= p.is_featured
+                                                                                                    ? '⭐ Featured' : ''
+                                                                                                    %>
+                                                                                    </p>
+                                                                                </div>
+                                                                </div>
+                                                                <div class="flex gap-2">
+                                                                    <a href="/admin/brands/<%= brand.uuid %>/products/<%= p.uuid %>/edit"
+                                                                        class="bg-blue-100 hover:bg-blue-200 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-semibold">Edit</a>
+                                                                    <form method="POST"
+                                                                        action="/admin/brands/<%= brand.uuid %>/products/<%= p.uuid %>/delete"
+                                                                        onsubmit="return confirm('Delete?')"
+                                                                        style="display:inline">
+                                                                        <button type="submit"
+                                                                            class="bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1.5 rounded-lg text-xs font-semibold">Del</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <% }); %>
+                                                    </div>
+                                                    <% } else { %>
+                                                        <p class="text-gray-400 text-sm text-center py-4">No products
+                                                            yet.
+                                                        </p>
+                                                        <% } %>
+                                            </div>
+                                <% } %>
+
+                                <% if (activeTab === 'navigation' && brand) { %>
+                                            <!-- NAVIGATION LINKS -->
+                                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                                    <span class="material-icons text-blue-500">menu</span> Navigation Links
+                                                </h2>
+                                                <div class="space-y-3 mb-4">
+                                                    <% if (navLinks && navLinks.length > 0) { %>
+                                                        <% navLinks.forEach(link => { %>
+                                                            <form method="POST" action="/admin/brands/<%= brand.uuid %>/nav-links/<%= link.uuid %>/update" class="flex gap-2 items-center">
+                                                                <input type="text" name="label" value="<%= link.label %>" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                                <input type="text" name="href" value="<%= link.href %>" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                                <label class="flex items-center gap-1 text-sm">
+                                                                    <input type="checkbox" name="is_button" value="1" <%= link.is_button ? 'checked' : '' %> class="w-4 h-4">
+                                                                    Button
+                                                                </label>
+                                                                <input type="number" name="sort_order" value="<%= link.sort_order %>" class="w-16 border border-gray-300 rounded-lg px-2 py-2 text-sm">
+                                                                <button type="submit" class="bg-blue-100 text-blue-600 px-3 py-2 rounded-lg text-xs font-semibold">Save</button>
+                                                                <button type="submit" formaction="/admin/brands/<%= brand.uuid %>/nav-links/<%= link.uuid %>/delete" formmethod="POST" onclick="return confirm('Hapus?')" class="bg-red-100 text-red-600 px-3 py-2 rounded-lg text-xs font-semibold">Del</button>
+                                                            </form>
+                                                        <% }); %>
+                                                    <% } else { %>
+                                                        <p class="text-gray-400 text-sm">Belum ada navigation links</p>
+                                                    <% } %>
+                                                </div>
+                                                <form method="POST" action="/admin/brands/<%= brand.uuid %>/nav-links/create" class="border-t pt-4">
+                                                    <h3 class="text-sm font-bold mb-2">Tambah Navigation Link</h3>
+                                                    <div class="flex gap-2 items-center">
+                                                        <input type="text" name="label" placeholder="Label" required class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        <input type="text" name="href" placeholder="Link" value="#" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        <label class="flex items-center gap-1 text-sm">
+                                                            <input type="checkbox" name="is_button" value="1" class="w-4 h-4">
+                                                            Button
+                                                        </label>
+                                                        <input type="number" name="sort_order" value="0" class="w-16 border border-gray-300 rounded-lg px-2 py-2 text-sm">
+                                                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Add</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- SOCIAL LINKS -->
+                                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                                    <span class="material-icons text-pink-500">share</span> Social Links
+                                                </h2>
+                                                <div class="space-y-3 mb-4">
+                                                    <% if (socialLinks && socialLinks.length > 0) { %>
+                                                        <% socialLinks.forEach(link => { %>
+                                                            <form method="POST" action="/admin/brands/<%= brand.uuid %>/social-links/<%= link.uuid %>/update" class="flex gap-2 items-center">
+                                                                <select name="icon" class="w-32 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                                                    onchange="document.getElementById('brand-social-preview-<%= link.uuid %>').textContent = this.value">
+                                                                    <% const brandSocialIcons = ['facebook','instagram','twitter','youtube','whatsapp','tiktok','linkedin','snapchat','pinterest','reddit','discord','telegram']; %>
+                                                                    <% brandSocialIcons.forEach(icon=> { %>
+                                                                        <option value="<%= icon %>" <%= link.icon === icon ? 'selected' : '' %>><%= icon %></option>
+                                                                    <% }); %>
+                                                                </select>
+                                                                <span class="material-icons text-blue-500" id="brand-social-preview-<%= link.uuid %>"><%= link.icon %></span>
+                                                                <input type="text" name="href" value="<%= link.href %>" placeholder="Link" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                                <input type="number" name="sort_order" value="<%= link.sort_order %>" class="w-16 border border-gray-300 rounded-lg px-2 py-2 text-sm">
+                                                                <button type="submit" class="bg-blue-100 text-blue-600 px-3 py-2 rounded-lg text-xs font-semibold">Save</button>
+                                                                <button type="submit" formaction="/admin/brands/<%= brand.uuid %>/social-links/<%= link.uuid %>/delete" formmethod="POST" onclick="return confirm('Hapus?')" class="bg-red-100 text-red-600 px-3 py-2 rounded-lg text-xs font-semibold">Del</button>
+                                                            </form>
+                                                        <% }); %>
+                                                    <% } else { %>
+                                                        <p class="text-gray-400 text-sm">Belum ada social links</p>
+                                                    <% } %>
+                                                </div>
+                                                <form method="POST" action="/admin/brands/<%= brand.uuid %>/social-links/create" class="border-t pt-4">
+                                                    <h3 class="text-sm font-bold mb-2">Tambah Social Link</h3>
+                                                    <div class="flex gap-2 items-center">
+                                                        <select name="icon" class="w-32 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                                            onchange="document.getElementById('brand-social-preview-new').textContent = this.value">
+                                                            <% const brandSocialIconsCreate = ['facebook','instagram','twitter','youtube','whatsapp','tiktok','linkedin','snapchat','pinterest','reddit','discord','telegram']; %>
+                                                            <% brandSocialIconsCreate.forEach(icon=> { %>
+                                                                <option value="<%= icon %>"><%= icon %></option>
+                                                            <% }); %>
+                                                        </select>
+                                                        <span class="material-icons text-blue-500" id="brand-social-preview-new">facebook</span>
+                                                        <input type="text" name="href" placeholder="Link" value="#" required class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        <input type="number" name="sort_order" value="0" class="w-16 border border-gray-300 rounded-lg px-2 py-2 text-sm">
+                                                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Add</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                <% } %>
+
+                                <% if (activeTab === 'footer' && brand) { %>
+                                            <!-- FOOTER LINKS -->
+                                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                                                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                                    <span class="material-icons text-gray-500">footer_generation</span> Footer Links
+                                                </h2>
+                                                <div class="space-y-3 mb-4">
+                                                    <% if (footerLinks && footerLinks.length > 0) { %>
+                                                        <% footerLinks.forEach(link => { %>
+                                                            <form method="POST" action="/admin/brands/<%= brand.uuid %>/footer-links/<%= link.uuid %>/update" class="flex gap-2 items-center">
+                                                                <input type="text" name="column_title" value="<%= link.column_title %>" placeholder="Column Title" class="w-40 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                                <input type="text" name="label" value="<%= link.label %>" placeholder="Label" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                                <input type="text" name="href" value="<%= link.href %>" placeholder="Link" class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                                <input type="number" name="sort_order" value="<%= link.sort_order %>" class="w-16 border border-gray-300 rounded-lg px-2 py-2 text-sm">
+                                                                <button type="submit" class="bg-blue-100 text-blue-600 px-3 py-2 rounded-lg text-xs font-semibold">Save</button>
+                                                                <button type="submit" formaction="/admin/brands/<%= brand.uuid %>/footer-links/<%= link.uuid %>/delete" formmethod="POST" onclick="return confirm('Hapus?')" class="bg-red-100 text-red-600 px-3 py-2 rounded-lg text-xs font-semibold">Del</button>
+                                                            </form>
+                                                        <% }); %>
+                                                    <% } else { %>
+                                                        <p class="text-gray-400 text-sm">Belum ada footer links</p>
+                                                    <% } %>
+                                                </div>
+                                                <form method="POST" action="/admin/brands/<%= brand.uuid %>/footer-links/create" class="border-t pt-4">
+                                                    <h3 class="text-sm font-bold mb-2">Tambah Footer Link</h3>
+                                                    <div class="flex gap-2 items-center">
+                                                        <input type="text" name="column_title" placeholder="Column Title" required class="w-40 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        <input type="text" name="label" placeholder="Label" required class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        <input type="text" name="href" placeholder="Link" value="#" required class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                                        <input type="number" name="sort_order" value="0" class="w-16 border border-gray-300 rounded-lg px-2 py-2 text-sm">
+                                                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Add</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                <% } %>
+
+                                            <% } %>
+
+                </div> <!-- END KOLOM 1: Form Editor -->
+
+                <% if (brand) { %>
+                <!-- KOLOM 2: Panel Live Preview -->
+                <div id="brand-preview-container" class="sticky top-20 hidden lg:flex flex-col bg-slate-200/50 rounded-2xl border border-slate-300 overflow-hidden h-[calc(100vh-100px)] transition-all duration-300 w-full lg:w-[500px] xl:w-[500px] 2xl:w-[700px] shrink-0">
+                    
+                    <!-- Toolbar Preview -->
+                    <div class="bg-white px-4 py-3 border-b border-slate-200 flex justify-between items-center shadow-sm z-10 shrink-0">
+                        <!-- Mode Layar Selector -->
+                        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                            <button type="button" onclick="setBrandPreviewMode('mobile')" id="btn-brand-mode-mobile" class="brand-preview-mode-btn p-1.5 rounded-md text-slate-500 hover:text-blue-600 hover:bg-white transition-all flex items-center justify-center" title="Mobile Mode">
+                                <span class="material-icons text-[18px]">smartphone</span>
+                            </button>
+                            <button type="button" onclick="setBrandPreviewMode('tablet')" id="btn-brand-mode-tablet" class="brand-preview-mode-btn p-1.5 rounded-md text-slate-500 hover:text-blue-600 hover:bg-white transition-all flex items-center justify-center" title="Tablet Mode">
+                                <span class="material-icons text-[18px]">tablet_mac</span>
+                            </button>
+                            <button type="button" onclick="setBrandPreviewMode('desktop')" id="btn-brand-mode-desktop" class="brand-preview-mode-btn active-mode p-1.5 rounded-md text-blue-600 bg-white shadow-sm border border-slate-200 transition-all flex items-center justify-center" title="Desktop Mode">
+                                <span class="material-icons text-[18px]">desktop_windows</span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="text-xs font-semibold text-slate-500 px-3 py-1 bg-slate-100 rounded-full border border-slate-200 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Live
+                            </div>
+                            <button type="button" onclick="document.getElementById('brand-preview-iframe').contentWindow.location.reload()" class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-all border border-transparent hover:border-blue-100" title="Muat Ulang Preview">
+                                <span class="material-icons text-[20px]">refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Area Iframe Wrapper -->
+                    <div class="flex-1 w-full relative p-0 overflow-auto bg-slate-800/5 transition-all duration-300 block" id="brand-preview-wrapper">
+                        <!-- Origin Scale Container -->
+                        <div id="brand-preview-scale-container" class="relative transition-all duration-300 mx-auto" style="transform-origin: top left;">
+                            <iframe id="brand-preview-iframe" src="/<%= brand.slug %>" class="bg-white transition-all duration-300 overflow-y-auto block w-full" title="Live Preview"></iframe>
+                        </div>
+                    </div>
+                </div> <!-- END KOLOM 2 -->
+                <% } %>
+
+                </div> <!-- END LAYOUT 2 KOLOM -->
+
+        </main>
+    </div> <!-- END main-content -->
+
+        <script>
+            // Sync color picker with hex text and preview strip
+            document.querySelectorAll('.color-picker').forEach(picker => {
+                picker.addEventListener('input', function () {
+                    // Update hex display
+                    const hexInput = this.closest('div').querySelector('.color-hex');
+                    if (hexInput) hexInput.value = this.value;
+                    // Update preview strip
+                    const previewId = this.dataset.preview;
+                    if (previewId) {
+                        const previewEl = document.getElementById(previewId);
+                        if (previewEl) previewEl.style.background = this.value;
+                    }
+                });
+            });
+
+            // Logo URL preview
+            function updateLogoPreview(url) {
+                const container = document.getElementById('logo_preview');
+                if (!container) return;
+                if (url && url.trim()) {
+                    container.innerHTML = '<img src="' + url + '" alt="Logo Preview" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML=\'<span class=\\\'material-icons text-red-300 text-2xl\\\'>broken_image</span>\'" />';
+                } else {
+                    container.innerHTML = '<span class="material-icons text-gray-300 text-2xl">image</span>';
+                }
+            }
+
+            // Template selection for edit form
+            let selectedTemplatePathEdit = null;
+            
+            function selectTemplateEdit(id, filePath) {
+                selectedTemplatePathEdit = filePath;
+                document.getElementById('selected-template-id-edit').value = id;
+                
+                // Update UI
+                document.querySelectorAll('.template-card').forEach(card => {
+                    card.classList.remove('border-blue-500', 'ring-2', 'ring-blue-200');
+                    const check = card.querySelector('.selected-check');
+                    if (check) check.classList.replace('bg-blue-500', 'bg-gray-400');
+                });
+                
+                const selectedCard = document.getElementById('template-card-edit-' + id);
+                if (selectedCard) {
+                    selectedCard.classList.add('border-blue-500', 'ring-2', 'ring-blue-200');
+                    const check = selectedCard.querySelector('.selected-check');
+                    if (check) check.classList.replace('bg-gray-400', 'bg-blue-500');
+                }
+                
+                // Update preview - reload brand preview iframe to reflect template change
+                if (filePath) {
+                    const brandIframe = document.getElementById('brand-preview-iframe');
+                    if (brandIframe) brandIframe.contentWindow.location.reload();
+                }
+            }
+
+            // Initialize template selection on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                const initialTemplateId = document.getElementById('selected-template-id-edit').value;
+                if (initialTemplateId) {
+                    const templates = <%- JSON.stringify(templates) %>;
+                    const template = templates.find(t => t.id == initialTemplateId);
+                    if (template) {
+                        // Only update UI state, don't reload preview
+                        selectedTemplatePathEdit = template.file_path;
+                        const selectedCard = document.getElementById('template-card-edit-' + template.id);
+                        if (selectedCard) {
+                            selectedCard.classList.add('border-blue-500', 'ring-2', 'ring-blue-200');
+                            const check = selectedCard.querySelector('.selected-check');
+                            if (check) check.classList.replace('bg-gray-400', 'bg-blue-500');
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <% if (brand) { %>
+        <!-- Script for Live Preview Modes (Brand) -->
+        <script>
+            let brandCurrentMode = 'desktop';
+
+            function applyBrandScale() {
+                const wrapper = document.getElementById('brand-preview-wrapper');
+                const scaleContainer = document.getElementById('brand-preview-scale-container');
+                const iframe = document.getElementById('brand-preview-iframe');
+                if (!wrapper || !scaleContainer || !iframe) return;
+
+                // Toggle padding on wrapper based on mode
+                if (brandCurrentMode === 'desktop') {
+                    wrapper.classList.remove('p-4', 'sm:p-6', 'md:p-8');
+                    wrapper.classList.add('p-0');
+                } else {
+                    wrapper.classList.remove('p-0');
+                    wrapper.classList.add('p-4', 'md:p-8');
+                }
+
+                // Get available dimensions, accounting for padding
+                const padding = brandCurrentMode === 'desktop' ? 0 : (window.innerWidth >= 768 ? 64 : 32);
+                const availableWidth = wrapper.clientWidth - padding;
+                const availableHeight = wrapper.clientHeight - padding;
+
+                let targetWidth, targetHeight;
+                let scale;
+
+                if (brandCurrentMode === 'mobile') {
+                    targetWidth = 375;
+                    targetHeight = 812;
+
+                    scale = Math.min(availableHeight / targetHeight, availableWidth / targetWidth);
+                    if (scale > 1) scale = 1;
+
+                    scaleContainer.style.transformOrigin = 'top left';
+
+                    iframe.className = "bg-white shadow-[0_0_0_12px_#1e293b,0_20px_25px_-5px_rgb(0,0,0,0.1),0_8px_10px_-6px_rgb(0,0,0,0.1)] overflow-y-auto block w-full rounded-[2.5rem] transition-all duration-300";
+
+                } else if (brandCurrentMode === 'tablet') {
+                    targetWidth = 768;
+                    targetHeight = 1024;
+
+                    scale = Math.min(availableHeight / targetHeight, availableWidth / targetWidth);
+                    if (scale > 1) scale = 1;
+
+                    scaleContainer.style.transformOrigin = 'top left';
+
+                    iframe.className = "bg-white shadow-[0_0_0_12px_#1e293b,0_20px_25px_-5px_rgb(0,0,0,0.1),0_8px_10px_-6px_rgb(0,0,0,0.1)] overflow-y-auto block w-full rounded-[1.5rem] transition-all duration-300";
+
+                } else { // desktop
+                    targetWidth = 1280;
+
+                    scale = availableWidth / targetWidth;
+                    if (scale > 1) scale = 1;
+
+                    targetHeight = availableHeight / scale;
+
+                    scaleContainer.style.transformOrigin = 'top left';
+
+                    iframe.className = "bg-white overflow-y-auto block w-full transition-all duration-300 border-none rounded-none";
+                }
+
+                // Apply dimensions to iframe
+                iframe.style.width = targetWidth + 'px';
+                iframe.style.height = targetHeight + 'px';
+
+                // Apply scale to the container
+                scaleContainer.style.transform = `scale(${scale})`;
+                scaleContainer.style.width = `${targetWidth * scale}px`;
+                scaleContainer.style.height = `${targetHeight * scale}px`;
+            }
+
+            function setBrandPreviewMode(mode) {
+                brandCurrentMode = mode;
+                const container = document.getElementById('brand-preview-container');
+                const buttons = document.querySelectorAll('.brand-preview-mode-btn');
+
+                // Reset state
+                buttons.forEach(btn => {
+                    btn.classList.remove('active-mode', 'text-blue-600', 'bg-white', 'shadow-sm', 'border-slate-200');
+                    btn.classList.add('text-slate-500', 'border-transparent');
+                });
+
+                // Set active button
+                const activeBtn = document.getElementById(`btn-brand-mode-${mode}`);
+                if (activeBtn) {
+                    activeBtn.classList.remove('text-slate-500', 'border-transparent');
+                    activeBtn.classList.add('active-mode', 'text-blue-600', 'bg-white', 'shadow-sm', 'border-slate-200');
+                }
+
+                // Adjust container width
+                if (mode === 'mobile') {
+                    container.style.width = '400px';
+                    container.style.maxWidth = '100%';
+                } else {
+                    container.style.width = '';
+                    container.style.maxWidth = '';
+                }
+
+                // Small delay to allow CSS width transition before scaling
+                setTimeout(applyBrandScale, 310);
+            }
+
+            // Initialize on load and on window resize
+            window.addEventListener('load', () => {
+                setBrandPreviewMode('desktop');
+                applyBrandScale();
+            });
+            window.addEventListener('resize', applyBrandScale);
+        </script>
+        <% } %>
+
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .sidebar-transition { transition: width 300ms ease-in-out; }
+        .card-hover { transition: transform 200ms ease, box-shadow 200ms ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1); }
+        .page-enter { animation: fadeIn 300ms ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+
+    <%- include('../partials/_scripts') %>
+</body>
+</html>

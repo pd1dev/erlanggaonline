@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Erlangga Online - Belajar Lebih Seru</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script content="tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary': '#3b82f6', 'background-light': '#f8fafc', 'background-dark': '#0f172a' }, fontFamily: { 'display': ['Lexend', 'sans-serif'] }, borderRadius: { 'DEFAULT': '0.5rem', 'lg': '1rem', 'xl': '1.5rem', 'full': '9999px' } } } }" id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#257bf4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 1.2s ease-out forwards;
+        }
+        #promo-slider {
+            transition: background 1.5s ease-in-out;
+        }
+    </style></head>
+<body class="bg-background-light dark:bg-background-dark text-[#0d131c] transition-colors duration-300">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-solid border-[#e7ecf4] bg-white/80 backdrop-blur-md px-6 md:px-20 py-4">
+<div class="mx-auto flex max-w-[1280px] items-center justify-between gap-8">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<svg class="h-8 w-8" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-extrabold tracking-tight">Erlangga Online</h2>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Beranda</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Produk</a>
+</nav>
+</div>
+<div class="flex items-center gap-4"><a class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-4 py-2" href="#">Survei</a><a class="text-sm font-bold bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all px-6 py-2 rounded-full" href="#">Belanja</a></div>
+</div>
+</header>
+<main class="flex-1">
+<!-- Hero Section -->
+<section class="py-12 md:py-24">
+<div class="mx-auto max-w-[1280px] grid grid-cols-1 items-center lg:grid-cols-2 px-6 md:px-20 lg:gap-8">
+<div class="flex flex-col gap-8 lg:pr-12"><div class="absolute -top-10 -left-10 h-32 w-32 rounded-full bg-yellow-300/20 blur-2xl -z-10 animate-pulse"></div><div class="absolute bottom-10 right-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl -z-10"></div>
+<div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-primary text-xs font-bold uppercase tracking-wider shadow-sm border border-primary/20">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                            Masa Depan Belajar Dimulai Sini
+                        </div>
+<h1 class="text-5xl font-black leading-[1.1] tracking-tight md:text-7xl">
+                            Belajar Lebih Seru dengan <span class="text-primary">Erlangga Online</span>
+</h1>
+<p class="text-lg text-slate-600 leading-relaxed max-w-[540px]">
+                            Akses ribuan materi pendidikan berkualitas, eBook interaktif, dan simulasi ujian kapan saja dan di mana saja. Jadikan proses belajar menjadi petualangan yang menyenangkan!
+                        </p>
+<div class="flex flex-wrap gap-4">
+<button class="flex h-14 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-lg font-bold text-white shadow-lg shadow-primary/30 hover:translate-y-[-2px] hover:shadow-xl transition-all">
+                                Mulai Belajar <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="flex h-14 items-center justify-center gap-2 rounded-xl border-2 border-[#e7ecf4] bg-white px-8 text-lg font-bold hover:bg-slate-50 transition-all">
+                                Lihat Produk
+                            </button>
+</div>
+</div>
+<div class="relative group"><div class="absolute -inset-4 bg-primary/10 blur-3xl rounded-3xl"></div>
+<div class="relative flex h-[400px] w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-[#60a5fa] p-8 text-white md:h-[500px] transition-all ease-in-out duration-1000 cursor-pointer group rounded-2xl" id="promo-slider">
+<img alt="Promo Banner" class="absolute inset-0 h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt8-5hX7-1uBof8v0-A6o3N4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4u5rW5L4vX4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute top-6 left-6 rounded-full bg-white/20 px-4 py-1 text-xs font-bold uppercase backdrop-blur-md animate-fade-in-up border border-white/30 shadow-sm z-10">Promo Spesial Bulan Ini</div>
+<div class="relative z-10 text-center animate-fade-in-up" style="animation-delay: 0.1s;">
+<h3 class="mb-4 text-4xl font-black md:text-5xl text-white">Diskon hingga 50% untuk Paket Berlangganan</h3>
+<p class="mb-8 text-lg text-white opacity-90">Gunakan kode: <span class="font-mono font-bold">ERLANGGA2024</span></p>
+<button class="rounded-full bg-white px-8 py-3 font-bold text-primary shadow-lg transition-transform hover:scale-105">
+        Cek Promo Sekarang
+    </button>
+</div>
+<div class="absolute bottom-4 flex gap-2 z-10">
+<button aria-label="Slide 1" class="h-2 w-8 rounded-full bg-white transition-all cursor-pointer"></button>
+<button aria-label="Slide 2" class="h-2 w-2 rounded-full bg-white/40 hover:bg-white/60 transition-all cursor-pointer"></button>
+<button aria-label="Slide 3" class="h-2 w-2 rounded-full bg-white/40 hover:bg-white/60 transition-all cursor-pointer"></button>
+</div>
+</div><div class="absolute inset-y-0 left-0 flex items-center pl-4 lg:pl-0 lg:-left-6"><button class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-primary shadow-lg hover:scale-110 transition-transform"><span class="material-symbols-outlined">chevron_left</span></button></div><div class="absolute inset-y-0 right-0 flex items-center pr-4 lg:pr-0 lg:-right-6"><button class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-primary shadow-lg hover:scale-110 transition-transform"><span class="material-symbols-outlined">chevron_right</span></button></div></div>
+</div>
+</section>
+<!-- Featured Products -->
+<section class="bg-white py-20 relative overflow-hidden">
+<div class="mx-auto max-w-[1280px] px-6">
+<div class="mb-12 flex flex-col items-center text-center">
+<h2 class="text-3xl font-bold tracking-tight md:text-4xl">Produk Unggulan Kami</h2>
+<div class="mt-4 h-1.5 w-24 rounded-full bg-primary"></div>
+</div>
+<div class="absolute top-0 right-10 opacity-10 hidden lg:block"><span class="material-symbols-outlined text-9xl text-primary">auto_awesome</span></div><div class="absolute bottom-0 left-10 opacity-10 hidden lg:block"><span class="material-symbols-outlined text-9xl text-yellow-500">celebration</span></div><div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+<!-- Card 1: eBook -->
+<div class="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-background-light p-2 shadow-sm transition-all hover:shadow-xl hover:translate-y-[-8px] border-t-4 border-t-primary">
+<div class="relative aspect-video overflow-hidden rounded-xl bg-slate-200">
+<img alt="eBook Platform" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Digital tablet showing an illustrated educational ebook cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhXs2braK2o3tPMyR9sqW-96Ifujmarqy0juZZj9FwZUuTdV35I3LUt8D87u8_AxFLYlHms9eomood7SIV8efKwudu6sSchbWc_Pwco_Wby2vwbcQbt7gxksZ7H8OnsBb5orUevVY5EWXUoKENjThXS5bl436rH_KrJz6BS6aPbXwcR3Oj595VdV1tEYVQOh9Y5vC3vk_LjWYRt10PsP0_iNm2b5VCgggxMIjSLD7ZISCCWx8bWl_aJEFL8ULmzHwkppql_HwcY9Y"/>
+<div class="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-primary shadow-sm">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold">eBook Interaktif</h3>
+<p class="mt-2 text-slate-500 line-clamp-2">Baca ribuan buku digital berkualitas dari penerbit Erlangga dengan fitur anotasi dan highlight.</p>
+<a class="mt-6 inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all" href="#">
+                                    Selengkapnya <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 2: e-Library -->
+<div class="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-background-light p-2 shadow-sm transition-all hover:shadow-xl hover:translate-y-[-8px] border-t-4 border-t-primary">
+<div class="relative aspect-video overflow-hidden rounded-xl bg-slate-200">
+<img alt="e-Library" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Modern minimalist digital library interface on a desktop screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE09nOL8ga0er1Vi9irSg-Rw-UiEZtPJMqIMuDDxirYLwdpHA6GSZ80l0ViARSQWXKOsc0IrRl2Mw_Tl3zaye8DMPyuzIsYkmtxOTaI2Bndvsm9aHs6hgkw-9lViRKDHDEQsXOUnQksW472BZVjM-iptu4lkX8CNqLUrm5IhRN6KVUXg0zS2fiDQ98h-DC9sUgvDgWay80WCwLyZVQMdQ6TKByyw6XSlXqGRfkNbxwjv-qRqZFiU5QE7NuC7hV31TSaXWD2vNQ7SU"/>
+<div class="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-primary shadow-sm">
+<span class="material-symbols-outlined">local_library</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold">e-Library Sekolah</h3>
+<p class="mt-2 text-slate-500 line-clamp-2">Solusi perpustakaan digital untuk instansi sekolah dengan manajemen peminjaman yang mudah.</p>
+<a class="mt-6 inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all" href="#">
+                                    Selengkapnya <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 3: Tryout -->
+<div class="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-background-light p-2 shadow-sm transition-all hover:shadow-xl hover:translate-y-[-8px] border-t-4 border-t-primary">
+<div class="relative aspect-video overflow-hidden rounded-xl bg-slate-200">
+<img alt="Tryout Online" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Student practicing online test on a laptop with timer visible" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgNcPjiWgA15tDf-F8Vx3RoLNvyyPBm_hn6g0NvREdn9SIwQj1KRV0WUTHzBeP8ZgPlTKsjNPz3I15dzaUyiyj4JR6YnLSAl0buIo4azFzsz-wzOCWPuw9_aYo9Cx4XFkdeqbQ_XhN7yffTX4RpJZBxI93OYEsms7Z0DPf2wbZxjOEs0KPreUX1wrt_bHV4r8BGlSJpYWDG6-49iCpSMkC13T7QW4rf6eWDrlN48zEJsZxQJXcAofEGhj7RMknrf9rlQp5mitpcX0"/>
+<div class="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-primary shadow-sm">
+<span class="material-symbols-outlined">quiz</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold">Tryout AKM &amp; Ujian</h3>
+<p class="mt-2 text-slate-500 line-clamp-2">Latih kesiapanmu menghadapi ujian nasional dan sekolah dengan simulasi real-time dan pembahasan.</p>
+<a class="mt-6 inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all" href="#">
+                                    Selengkapnya <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 4: Bank Soal -->
+<div class="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-background-light p-2 shadow-sm transition-all hover:shadow-xl hover:translate-y-[-8px] border-t-4 border-t-primary">
+<div class="relative aspect-video overflow-hidden rounded-xl bg-blue-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-6xl text-primary/40">inventory_2</span>
+<div class="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-primary shadow-sm">
+<span class="material-symbols-outlined">task</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold">Bank Soal Digital</h3>
+<p class="mt-2 text-slate-500 line-clamp-2">Akses puluhan ribu soal latihan berkualitas untuk berbagai jenjang pendidikan.</p>
+<a class="mt-6 inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all" href="#">
+            Selengkapnya <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 5: Video Pembelajaran -->
+<div class="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-background-light p-2 shadow-sm transition-all hover:shadow-xl hover:translate-y-[-8px] border-t-4 border-t-primary">
+<div class="relative aspect-video overflow-hidden rounded-xl bg-purple-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-6xl text-purple-400/40">play_circle</span>
+<div class="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-primary shadow-sm">
+<span class="material-symbols-outlined">movie</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold">Video Pembelajaran</h3>
+<p class="mt-2 text-slate-500 line-clamp-2">Materi visual yang menarik dibawakan oleh pengajar berpengalaman di bidangnya.</p>
+<a class="mt-6 inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all" href="#">
+            Selengkapnya <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 6: Webinar -->
+<div class="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-background-light p-2 shadow-sm transition-all hover:shadow-xl hover:translate-y-[-8px] border-t-4 border-t-primary">
+<div class="relative aspect-video overflow-hidden rounded-xl bg-orange-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-6xl text-orange-400/40">podcasts</span>
+<div class="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-primary shadow-sm">
+<span class="material-symbols-outlined">groups</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold">Webinar Eksklusif</h3>
+<p class="mt-2 text-slate-500 line-clamp-2">Sesi interaktif langsung bersama pakar pendidikan dan tokoh inspiratif.</p>
+<a class="mt-6 inline-flex items-center gap-2 font-bold text-primary group-hover:gap-3 transition-all" href="#">
+            Selengkapnya <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div></div>
+</div>
+</section>
+<!-- Survey Teaser -->
+<section class="mx-auto max-w-[1280px] px-6 py-10">
+<div class="flex flex-col items-center justify-between gap-8 rounded-[2rem] bg-primary p-8 text-white md:flex-row md:px-16 md:py-12 hover:scale-[1.02] hover:shadow-2xl transition-all duration-500">
+<div class="flex items-start gap-6">
+<div class="hidden md:flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
+<span class="material-symbols-outlined text-4xl">rate_review</span>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="text-2xl font-bold md:text-3xl">Suara Anda Berharga!</h2>
+<p class="max-w-[500px] text-primary-100 opacity-90">
+                                Bantu kami meningkatkan layanan Erlangga Online dengan mengikuti Survei Pelanggan. Dapatkan kesempatan memenangkan hadiah menarik!
+                            </p>
+</div>
+</div>
+<button class="flex min-w-[180px] items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 text-lg font-bold text-primary hover:bg-slate-50 transition-all">
+                        Ikut Survei
+                    </button>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-20 relative overflow-hidden">
+<div class="mx-auto max-w-[1280px] px-6">
+<div class="mb-12 flex flex-col items-center text-center">
+<span class="text-sm font-bold uppercase tracking-widest text-primary">Testimoni</span>
+<h2 class="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Apa Kata Mereka?</h2>
+</div>
+<div class="absolute top-0 right-10 opacity-10 hidden lg:block"><span class="material-symbols-outlined text-9xl text-primary">auto_awesome</span></div><div class="absolute bottom-0 left-10 opacity-10 hidden lg:block"><span class="material-symbols-outlined text-9xl text-yellow-500">celebration</span></div><div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+<div class="rounded-2xl bg-white p-8 shadow-sm border border-slate-50">
+<div class="flex gap-1 text-yellow-400">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="mt-4 italic text-slate-600">"Belajar jadi lebih gampang pakai eBook Erlangga. Gambarnya bagus dan bisa di-highlight sesuka hati!"</p>
+<div class="mt-6 flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-slate-100 overflow-hidden">
+<img alt="User" data-alt="Student avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6EwB55y_B5npVWhPN6v0BFG-ofktjs1mPM_iy_0zOZSGId3nDThUf60CXNX6XwEavPjk5sewembGc7ydvvU-u95eLsNDGL7-RjQ0xFa3YNhsHQBe7tNCPgDJegZo2BCmvNqRhBFcJdKfdTtqY2O59PLE5LsEiOzcIeCOcYgkoda1C5RVwTE7RAh6aghiXai5ZPtd5fVSb5Lp8Dz7AoZTOmaIuNAHrwo-dsas6ZKpDqDBXOPi9XlQpZvXuRMJlaAtzsbCkQ0g5Jgo"/>
+</div>
+<div>
+<h4 class="font-bold">Andi Pratama</h4>
+<p class="text-xs text-slate-400">Siswa Kelas 9</p>
+</div>
+</div>
+</div>
+<div class="rounded-2xl bg-white p-8 shadow-sm border border-slate-50">
+<div class="flex gap-1 text-yellow-400">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="mt-4 italic text-slate-600">"Sangat terbantu untuk materi pembelajaran jarak jauh. Fitur perpustakaan digitalnya sangat lengkap."</p>
+<div class="mt-6 flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-slate-100 overflow-hidden">
+<img alt="User" data-alt="Teacher avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADCs2QGTKLf2WchdKkteEvCGNNtyqVgWLYwh38eiv1U6jAG7drtS2FwJ02PulCh_auQDCHtjTtAO4ZxtiS6h7SHRQ5oucVC8buWXsZnBHEL1B7Mdp2Cl0-2cBSD1_ZfYDVKhPJZbIe_ZpxtO9fP9LvB80pl0_mrlRPVB8MuGJZ2EPKxCJ6CDubaeemIr9fpwejhbTHHGY59D4OyCzX0n_SQmvIYKuqyDTgg0Ho45Gz9XoeryW1VtQYnntwUy2Fhi3xpwLvrI1C8ZY"/>
+</div>
+<div>
+<h4 class="font-bold">Ibu Siti Nurhaliza</h4>
+<p class="text-xs text-slate-400">Guru Matematika</p>
+</div>
+</div>
+</div>
+<div class="rounded-2xl bg-white p-8 shadow-sm border border-slate-50">
+<div class="flex gap-1 text-yellow-400">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="mt-4 italic text-slate-600">"Tryoutnya mirip banget sama soal ujian asli. Bikin pede pas hari H ujian!"</p>
+<div class="mt-6 flex items-center gap-4">
+<div class="h-12 w-12 rounded-full bg-slate-100 overflow-hidden">
+<img alt="User" data-alt="High school student portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnSrwu7ez6DT0BZGmrHW23v-6oAjyRtHVDj-afxChUKwYXGWPODwhkpRsYPTgKB7HblFre4RJM-8M2rCmy5j3_d2Dj9z-0AiXYiv2eVJhc3VuQ7KpXffe9sKaFneloxBpV0erJ1eWj4OHaUoqofUOoR3HNpz1Hl3tuQLbIWZ_yQqp0BXGZVl7XOvS8Whm1eqaRKFTAgTBH4XvztdvpBmJ7DvWdLpQXs9FQJQ9NLCbXg7P40AZ9iBkBtmOGYNx6xKyGthmMnq6V2kI"/>
+</div>
+<div>
+<h4 class="font-bold">Rara Safira</h4>
+<p class="text-xs text-slate-400">Siswa Kelas 12</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white border-t border-[#e7ecf4] pt-16 pb-8">
+<div class="mx-auto max-w-[1280px] px-6">
+<div class="grid grid-cols-1 gap-12 lg:grid-cols-4">
+<div class="col-span-1 lg:col-span-1">
+<div class="flex items-center gap-3 text-primary mb-6">
+<span class="material-symbols-outlined text-4xl">auto_stories</span>
+<h2 class="text-2xl font-extrabold tracking-tight text-[#0d131c]">Erlangga Online</h2>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed">
+                            Membangun generasi cerdas Indonesia melalui teknologi pendidikan terdepan dan materi berkualitas tinggi.
+                        </p>
+<div class="mt-6 flex gap-4">
+<a class="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">social_leaderboard</span>
+</a>
+<a class="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">photo_camera</span>
+</a>
+<a class="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">play_circle</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8 lg:col-span-2">
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-[#0d131c]">Menu Utama</h4>
+<nav class="flex flex-col gap-3 text-sm text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Beranda</a>
+<a class="hover:text-primary transition-colors" href="#">Semua Produk</a>
+<a class="hover:text-primary transition-colors" href="#">Tentang Kami</a>
+<a class="hover:text-primary transition-colors" href="#">Cara Berlangganan</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-[#0d131c]">Layanan</h4>
+<nav class="flex flex-col gap-3 text-sm text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">eBook</a>
+<a class="hover:text-primary transition-colors" href="#">e-Library</a>
+<a class="hover:text-primary transition-colors" href="#">Tryout Online</a>
+<a class="hover:text-primary transition-colors" href="#">Hubungi Kami</a>
+</nav>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-[#0d131c]">Kontak</h4>
+<div class="flex flex-col gap-3 text-sm text-slate-500">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-xl">location_on</span>
+<span>Jl. H. Baping No. 100, Ciracas, Jakarta Timur, 13740</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">phone_iphone</span>
+<span>+62 (21) 871 7006</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">mail</span>
+<span>support@erlanggaonline.com</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 border-t border-slate-100 pt-8 text-center text-xs text-slate-400">
+<p>© 2024 PT Penerbit Erlangga Online. Seluruh hak cipta dilindungi undang-undang.</p>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

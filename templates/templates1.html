@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eksakta Landing Page - STEM Book Series</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0056b3",
+                        "primary-hover": "#004494",
+                        "background-light": "#ffffff",
+                        "accent-green": "#76bc43",
+                        "accent-purple": "#6658a6",
+                        "accent-orange": "#f58220",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glow-text {
+            text-shadow: 0 0 20px rgba(0, 86, 179, 0.3)
+        }
+        .book-card {
+            transition: all 0.4s ease
+        }
+        .book-card:hover {
+            transform: translatey(-8px)
+        }
+        .circuit-bg {
+            background-color: #ffffff;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(118, 188, 67, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(102, 88, 166, 0.05) 0%, transparent 20%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10h80v80h-80z' fill='none' stroke='rgba(200,200,200,0.1)' stroke-width='1'/%3E%3Ccircle cx='20' cy='20' r='2' fill='rgba(118,188,67,0.15)'/%3E%3Ccircle cx='80' cy='80' r='2' fill='rgba(102,88,166,0.15)'/%3E%3Cpath d='M20 20l15 15' stroke='rgba(0, 86, 179, 0.1)' stroke-width='1'/%3E%3C/svg%3E");
+        }
+        .book-3d {
+            box-shadow: -8px 8px 15px rgba(0, 0, 0, 0.15), inset 2px 0 5px rgba(255, 255, 255, 0.5);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease
+        }
+        .book-3d::before {
+            content: "";
+            position: absolute;
+            top: 1%;
+            left: -3px;
+            width: 6px;
+            height: 98%;
+            background: linear-gradient(to right, #e0e0e0, #fff 20%, #d0d0d0 40%, #f0f0f0 100%);
+            border-radius: 2px 0 0 2px;
+            z-index: -1
+        }
+        .cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-gray-800 font-display selection:bg-primary selection:text-white overflow-x-hidden">
+<nav class="fixed w-full z-50 top-0 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20">
+<div class="flex-shrink-0 flex items-center gap-3">
+<div class="h-10 w-10 bg-primary rounded-lg shadow-md flex items-center justify-center font-bold text-white text-xl">E</div>
+<span class="font-bold text-xl tracking-tight text-gray-900">ERLANGGA</span>
+</div>
+<div class="hidden md:block">
+<div class="ml-10 flex items-baseline space-x-8">
+<a class="text-primary font-bold px-3 py-2 rounded-md transition-colors" href="#">Beranda</a>
+<a class="text-gray-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors" href="#features">Keunggulan</a>
+<a class="text-gray-600 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors" href="#catalog">Produk</a>
+<a class="bg-primary hover:bg-primary-hover text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 transform hover:-translate-y-0.5" href="#">Hubungi Kami</a>
+</div>
+</div>
+<div class="-mr-2 flex md:hidden">
+<button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-primary hover:bg-blue-50 focus:outline-none" type="button">
+<span class="sr-only">Open main menu</span>
+<span class="material-icons">menu</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+<div class="absolute inset-0 circuit-bg z-0" data-alt="Abstract light circuit board pattern background"></div>
+<div class="absolute top-20 right-10 w-96 h-96 bg-accent-green/10 rounded-full blur-3xl animate-pulse" style="animation-duration: 4s;"></div>
+<div class="absolute bottom-10 left-10 w-80 h-80 bg-accent-purple/10 rounded-full blur-3xl animate-pulse" style="animation-duration: 6s;"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[80px]"></div>
+<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
+<div class="lg:w-1/2 text-center lg:text-left mb-16 lg:mb-0">
+<div class="inline-block px-4 py-1.5 mb-6 rounded-full bg-white border border-primary/20 text-primary font-bold text-sm tracking-wide uppercase shadow-md animate-bounce">
+                    🚀 Kurikulum Merdeka Ready
+                </div>
+<h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1] text-gray-900">
+                    Seri Eksakta: <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-700 to-gray-900">Masa Depan Teknologi</span> <br/>
+<span class="text-primary text-6xl lg:text-7xl drop-shadow-sm">di Tangan Siswa</span>
+</h1>
+<p class="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                    Gabungkan keseruan belajar dengan teknologi! Mencetak inovator cilik yang cerdas, kreatif, dan siap menghadapi dunia digital.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+<a class="px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg hover:bg-primary-hover transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2 group hover:scale-105" href="#catalog">
+                        Lihat Katalog
+                        <span class="material-icons group-hover:translate-x-1 transition-transform">rocket_launch</span>
+</a>
+<a class="px-8 py-4 bg-white border-2 border-gray-100 text-gray-700 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all flex items-center justify-center gap-2 hover:border-primary hover:text-primary shadow-lg shadow-gray-200/50" href="#">
+<span class="material-icons text-primary">play_circle</span>
+                        Tonton Video
+                    </a>
+</div>
+</div>
+<div class="lg:w-1/2 relative flex justify-center items-center">
+<div class="absolute -top-10 right-10 bg-white p-3 rounded-2xl shadow-xl animate-bounce border border-gray-100 z-20" style="animation-duration: 3s;">
+<span class="material-icons text-4xl text-primary">rocket_launch</span>
+</div>
+<div class="absolute bottom-10 left-0 bg-white p-3 rounded-2xl shadow-xl animate-pulse border border-gray-100 z-20" style="animation-duration: 4s;">
+<span class="material-icons text-4xl text-accent-purple">touch_app</span>
+</div>
+<div class="relative w-full max-w-lg mx-auto transform hover:scale-105 transition-transform duration-500">
+<div class="relative z-10 p-6 bg-white rounded-3xl shadow-2xl border border-gray-100">
+<div class="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-white flex items-center justify-center relative">
+<div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
+<div class="w-full h-full flex items-center justify-center scale-110">
+<div class="w-64 h-64 relative">
+<img alt="AI Chip Illustration" class="w-full h-full object-contain drop-shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9RN8fwewwKpg99iqxDxgP_D_6jTMLceTfupkWLcJ2elYb6CMYFoSi5M4-ZzFePvr19-aax34Nc4HbIpC6Yonb0BK8l-Cty0WHON1clwYh83zisocgLSp4ZwK1-gnkR6ZLxsXTeDtZ_D4GCVzKv20HVgG3lY2iaFTepzJfgnsKjslW9vhImCXroOcahT6ePfPkFXV_aVGhWhkpr98pbT-FQ1dnuCLoN6W8TPI5BBN6p2wgMdCvBjuNHOIRLYS5jBdc5UHhUXcvQJdV"/>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute -z-10 top-10 -right-10 w-full h-full bg-accent-green/20 rounded-3xl -rotate-6 scale-95"></div>
+<div class="absolute -z-20 -bottom-5 -left-5 w-full h-full bg-primary/20 rounded-3xl rotate-3 scale-95"></div>
+<div class="absolute -bottom-6 right-10 bg-white p-4 rounded-xl shadow-xl border-l-4 border-accent-green flex items-center gap-3 z-30 transform hover:-translate-y-1 transition-transform">
+<div class="bg-accent-green/10 p-2 rounded-lg text-accent-green">
+<span class="material-icons">qr_code_scanner</span>
+</div>
+<div>
+<p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Interaktif</p>
+<p class="font-bold text-gray-900">Scan &amp; Belajar!</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-white" id="features">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-20">
+<span class="text-accent-purple font-bold tracking-wider uppercase text-sm bg-accent-purple/10 px-3 py-1 rounded-full">Fitur Unggulan</span>
+<h2 class="text-4xl font-extrabold mt-4 mb-4 text-gray-900">Kenapa Harus <span class="text-primary underline decoration-wavy decoration-primary/30 underline-offset-4">Eksakta?</span></h2>
+<p class="text-gray-500 max-w-2xl mx-auto text-lg">Belajar jadi lebih seru dengan metode kekinian yang disukai anak-anak.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-10">
+<div class="group bg-white p-8 rounded-3xl border border-gray-100 hover:border-primary/30 transition-all relative overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 duration-300">
+<div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-[100px] -mr-10 -mt-10 transition-all group-hover:scale-110"></div>
+<div class="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shadow-sm mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300 rotate-3 group-hover:rotate-0">
+<span class="material-icons text-4xl">rocket_launch</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">Berbasis STEM</h3>
+<p class="text-gray-500 leading-relaxed">
+                        Sains, Teknologi, Teknik, dan Matematika jadi satu paket komplit yang asik dipelajari bareng-bareng.
+                    </p>
+</div>
+<div class="group bg-white p-8 rounded-3xl border border-gray-100 hover:border-accent-purple/30 transition-all relative overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-accent-purple/10 hover:-translate-y-2 duration-300">
+<div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-accent-purple/10 to-transparent rounded-bl-[100px] -mr-10 -mt-10 transition-all group-hover:scale-110"></div>
+<div class="w-20 h-20 bg-accent-purple/10 rounded-2xl flex items-center justify-center text-accent-purple shadow-sm mb-6 group-hover:bg-accent-purple group-hover:text-white transition-all duration-300 -rotate-2 group-hover:rotate-0">
+<span class="material-icons text-4xl">touch_app</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-accent-purple transition-colors">Print-Dig Integration</h3>
+<p class="text-gray-500 leading-relaxed">
+                        Buku fisik rasa digital! Tinggal scan QR code, langsung muncul video dan kuis seru.
+                    </p>
+</div>
+<div class="group bg-white p-8 rounded-3xl border border-gray-100 hover:border-accent-green/30 transition-all relative overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-accent-green/10 hover:-translate-y-2 duration-300">
+<div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-accent-green/10 to-transparent rounded-bl-[100px] -mr-10 -mt-10 transition-all group-hover:scale-110"></div>
+<div class="w-20 h-20 bg-accent-green/10 rounded-2xl flex items-center justify-center text-accent-green shadow-sm mb-6 group-hover:bg-accent-green group-hover:text-white transition-all duration-300 rotate-3 group-hover:rotate-0">
+<span class="material-icons text-4xl">psychology</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-accent-green transition-colors">Deep Learning</h3>
+<p class="text-gray-500 leading-relaxed">
+                        Materi disusun bertahap biar konsepnya nempel terus di ingatan dan paham sampai ke akar-akarnya.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 relative bg-gray-50" id="catalog">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+<div>
+<h2 class="text-4xl font-extrabold mb-3 text-gray-900">Katalog Buku</h2>
+<p class="text-gray-600 text-lg">Pilih buku sesuai jenjang kelasmu!</p>
+</div>
+<div class="bg-white p-1.5 rounded-xl shadow-sm border border-gray-100 flex flex-wrap gap-1">
+<button class="px-6 py-2.5 rounded-lg bg-primary text-white shadow-md text-sm font-bold transition-all transform active:scale-95">Semua</button>
+<button class="px-6 py-2.5 rounded-lg hover:bg-gray-50 text-gray-600 text-sm font-bold transition-all">Koding &amp; KA</button>
+<button class="px-6 py-2.5 rounded-lg hover:bg-gray-50 text-gray-600 text-sm font-bold transition-all">Informatika</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="book-card group relative bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-2xl hover:shadow-accent-green/20 transition-all duration-300 flex flex-col h-full">
+<div class="bg-gray-50 p-6 flex justify-center items-center relative h-64 overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(118,188,67,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="w-40 h-56 bg-white shadow-xl rounded-sm book-3d relative z-10 flex flex-col overflow-hidden transform group-hover:scale-105 transition-transform duration-500">
+<img alt="Koding &amp; KA Kelas VII Cover" class="cover-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH9FGJPdd-2UQo18K3gwIAXQIYmbT-z-7WNbU8Y5ur0yJSksKWoE6Ax7spoKME5_XmnM6VfdymrurOBFi5qRGU2S5FVEj9RUFMp8y_Fgs3Q2tT3J_UUjEv_pwm_0p8fVTQ--RiaTqlNu29QRMzlaY2Z8DS8lr9N9RgjtRZCogh3t54_lwkPwh0oQuMNLBihf8gaZJOrD-DihH-RL0jlwFlO2oe1ofcgynK7vRqL3Xmwx53HOTT0km4MxvOc-EHqYTt2WY_NdAUw6x3"/>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-accent-green/10 text-accent-green text-[11px] font-extrabold px-2.5 py-1 rounded-full border border-accent-green/20 uppercase tracking-wide">Grade 7</span>
+</div>
+<h3 class="text-lg font-bold text-gray-900 leading-snug mb-2 group-hover:text-primary transition-colors">Koding &amp; KA Kelas VII</h3>
+<p class="text-sm text-gray-500 mb-4 line-clamp-2 leading-relaxed flex-grow">Kecerdasan Artifisial seru untuk pemula.</p>
+<div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+<span class="text-lg font-bold text-gray-900">Rp 85.000</span>
+<button class="bg-primary/10 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300">
+                                Detail
+                            </button>
+</div>
+</div>
+</div>
+<div class="book-card group relative bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-2xl hover:shadow-accent-green/20 transition-all duration-300 flex flex-col h-full">
+<div class="bg-gray-50 p-6 flex justify-center items-center relative h-64 overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(118,188,67,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="w-40 h-56 bg-white shadow-xl rounded-sm book-3d relative z-10 flex flex-col overflow-hidden transform group-hover:scale-105 transition-transform duration-500">
+<img alt="Informatika Kelas VII Cover" class="cover-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwzj8PnkwJIEDTUPsJ8_p6l0fGyMwwWPE_FOBz5LISOLwGDfUY-YzB1YJXDIHB5f7qdTfP6VXN-XIbbtuwSTPogIIwJlfJapSDucTuiDyXBFjkbOkP2D3leHmk_5ZHTNQKNKAC2Jo8hqD5tMfzWnF8Q642OoEe8OVvndE_8Lp_5q1QKN2sGpUF5j7SAzwKpa0gLN_nAbYSWYWt63V_5NoEscbGFsN-S9fRqynE2X7ds7JpGxcsiJv82EUq1dSoMf-sfQt8PXOeee3y"/>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-accent-green/10 text-accent-green text-[11px] font-extrabold px-2.5 py-1 rounded-full border border-accent-green/20 uppercase tracking-wide">Grade 7</span>
+</div>
+<h3 class="text-lg font-bold text-gray-900 leading-snug mb-2 group-hover:text-primary transition-colors">Informatika Kelas VII</h3>
+<p class="text-sm text-gray-500 mb-4 line-clamp-2 leading-relaxed flex-grow">Kenali hardware dan cara kerja komputer.</p>
+<div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+<span class="text-lg font-bold text-gray-900">Rp 85.000</span>
+<button class="bg-primary/10 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300">
+                                Detail
+                            </button>
+</div>
+</div>
+</div>
+<div class="book-card group relative bg-white rounded-2xl overflow-hidden border-2 border-primary shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 transform md:-translate-y-2 flex flex-col h-full">
+<div class="absolute top-4 right-4 z-20">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg flex items-center gap-1 uppercase tracking-wider">
+<span class="material-icons text-[12px]">star</span> Best Seller
+                        </span>
+</div>
+<div class="bg-gray-50 p-6 flex justify-center items-center relative h-64 overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(0,86,179,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="w-40 h-56 bg-white shadow-xl rounded-sm book-3d relative z-10 flex flex-col overflow-hidden transform group-hover:scale-105 transition-transform duration-500">
+<img alt="Koding &amp; KA Kelas VIII Cover" class="cover-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW7ZwFoMxLx2HRR6eDSqClQmmOnS2WIBmv3pswnpBoK7z9xIN7fFyrovv6WJoLkUfB7ueoPjbBnG2Re9riSWevkRYh-p71DgeMN45HWqegfSztsaOMBEFSN9tNEEi_3Y51cLkqr0hqL-0WlbPbtIm103JduxqIuuFjl2d_E8iCdRPKH7vBwRyfoKlAoDxjMTI9P1OUwn4paz-gzoOTQKlY2SYaPpFjDHDqbd1QByHcv80Pc9CzbBTjYyFNcOKOrb0JK7TTDMBBmsmm"/>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-accent-orange/10 text-accent-orange text-[11px] font-extrabold px-2.5 py-1 rounded-full border border-accent-orange/20 uppercase tracking-wide">Grade 8</span>
+</div>
+<h3 class="text-lg font-bold text-gray-900 leading-snug mb-2 group-hover:text-primary transition-colors">Koding &amp; KA Kelas VIII</h3>
+<p class="text-sm text-gray-500 mb-4 line-clamp-2 leading-relaxed flex-grow">Petualangan Neural networks &amp; deep learning.</p>
+<div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+<span class="text-lg font-bold text-primary">Rp 88.000</span>
+<button class="bg-primary hover:bg-primary-hover text-white px-5 py-2 rounded-lg text-xs font-bold transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/40">
+                                Beli Sekarang
+                            </button>
+</div>
+</div>
+</div>
+<div class="book-card group relative bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-2xl hover:shadow-accent-purple/20 transition-all duration-300 flex flex-col h-full">
+<div class="bg-gray-50 p-6 flex justify-center items-center relative h-64 overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_120%,rgba(102,88,166,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="w-40 h-56 bg-white shadow-xl rounded-sm book-3d relative z-10 flex flex-col overflow-hidden transform group-hover:scale-105 transition-transform duration-500">
+<img alt="Koding &amp; KA Kelas IX Cover" class="cover-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApCEp8an1g5IvJ_AD4VVhIoGkYNPgbBU1krLzQuKUPwCdn0Q7DkhciC3fiBP-SRyt_EDhQkDXPGC0o2suTDkGGpI_q6YRse-DKKCTNmnSRV1O0JrhWCxu3hxSrfRifS8ICvV0wzbP8NaLoRAZmwFKw3gPsmUCCnVMnPFS3reamRXJKMkLhnCjMY03a14e0BN369pI_YTuKzC9IbU67FqKPD1Lm4Sk3bsXtlwiwf_wwN6Y9GRyIGtR3EjYZNl3selSkMXjTmVBo_ujj"/>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-accent-purple/10 text-accent-purple text-[11px] font-extrabold px-2.5 py-1 rounded-full border border-accent-purple/20 uppercase tracking-wide">Grade 9</span>
+</div>
+<h3 class="text-lg font-bold text-gray-900 leading-snug mb-2 group-hover:text-primary transition-colors">Koding &amp; KA Kelas IX</h3>
+<p class="text-sm text-gray-500 mb-4 line-clamp-2 leading-relaxed flex-grow">Bikin robot sendiri dengan otomasi cerdas.</p>
+<div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+<span class="text-lg font-bold text-gray-900">Rp 92.000</span>
+<button class="bg-primary/10 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300">
+                                Detail
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 relative overflow-hidden bg-white">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-white/0"></div>
+<div class="absolute top-0 right-0 w-64 h-64 bg-accent-purple/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-accent-green/10 rounded-full blur-3xl -ml-16 -mb-16"></div>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+<h2 class="text-4xl md:text-5xl font-extrabold mb-6 text-gray-900">Siap Menghadapi <span class="text-primary relative">Era Digital?<svg class="absolute w-full h-3 -bottom-1 left-0 text-primary opacity-30" preserveAspectRatio="none" viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg"><path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" stroke-width="3"></path></svg></span></h2>
+<p class="text-xl text-gray-600 mb-10 font-medium">
+                Dapatkan seri buku Eksakta sekarang! Bekal terbaik untuk masa depan teknologi yang gemilang.
+            </p>
+<div class="flex flex-col sm:flex-row justify-center gap-4">
+<button class="bg-primary hover:bg-primary-hover text-white font-bold py-4 px-10 rounded-full shadow-xl shadow-primary/30 transition-transform transform hover:scale-105 flex items-center justify-center gap-2 text-lg">
+<span class="material-icons">download</span>
+                    Download Silabus
+                </button>
+<button class="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold py-4 px-10 rounded-full transition-all flex items-center justify-center gap-2 text-lg hover:shadow-lg">
+<span class="material-icons">support_agent</span>
+                    Hubungi Sales
+                </button>
+</div>
+</div>
+</section>
+<footer class="bg-gray-50 border-t border-gray-200 py-16">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid md:grid-cols-4 gap-10 mb-10">
+<div class="col-span-1 md:col-span-2">
+<div class="flex items-center gap-3 mb-6">
+<div class="h-9 w-9 bg-primary rounded-lg shadow-sm flex items-center justify-center font-bold text-white text-base">E</div>
+<span class="font-bold text-xl tracking-tight text-gray-900">ERLANGGA</span>
+</div>
+<p class="text-gray-500 text-sm leading-relaxed max-w-sm mb-8">
+                        Penerbit Erlangga telah melayani kebutuhan pendidikan Indonesia sejak 1952. Kami berkomitmen untuk terus berinovasi mencerdaskan bangsa.
+                    </p>
+<div class="flex space-x-4">
+<a class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-primary hover:shadow-md transition-all transform hover:scale-110" href="#"><span class="material-icons text-xl">facebook</span></a>
+<a class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-primary hover:shadow-md transition-all transform hover:scale-110" href="#"><span class="material-icons text-xl">smart_display</span></a>
+<a class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-primary hover:shadow-md transition-all transform hover:scale-110" href="#"><span class="material-icons text-xl">photo_camera</span></a>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-gray-900 mb-6 text-lg">Produk</h4>
+<ul class="space-y-3 text-sm text-gray-600">
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Buku Teks</a></li>
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Buku Digital</a></li>
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Alat Peraga</a></li>
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Eksakta Series</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-gray-900 mb-6 text-lg">Bantuan</h4>
+<ul class="space-y-3 text-sm text-gray-600">
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Hubungi Kami</a></li>
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Lokasi Toko</a></li>
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Karir</a></li>
+<li><a class="hover:text-primary transition-colors hover:translate-x-1 inline-block" href="#">Kebijakan Privasi</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-sm text-gray-500">© 2023 Penerbit Erlangga. All rights reserved.</p>
+<div class="flex items-center gap-2 text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
+<span>Powered by</span>
+<span class="font-bold text-gray-800">Kurikulum Merdeka</span>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>
